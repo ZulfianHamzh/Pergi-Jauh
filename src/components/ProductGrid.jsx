@@ -1,3 +1,4 @@
+// src/components/ProductGrid.jsx
 import React from 'react';
 import ProductCard from './ProductCard';
 
@@ -8,14 +9,14 @@ export default function ProductGrid() {
       name: 'Affogato',
       price: 25000,
       availability: 'Stok Tersedia',
-      image: '/images/small_AFFOGATO.png', // Path relatif ke folder public
+      image: '/images/affogato.png',
     },
     {
       id: 2,
       name: 'Americano',
       price: 25000,
       availability: 'Stok Tersedia',
-      image: '/images/small_Americano.png', // Path relatif ke folder public
+      image: '/images/americano.png',
     },
     // Tambahkan lebih banyak produk di sini
   ];
@@ -25,6 +26,7 @@ export default function ProductGrid() {
       {products.map((product) => (
         <ProductCard
           key={product.id}
+          id={product.id} // Teruskan ID produk
           imageSrc={product.image}
           name={product.name}
           price={product.price}
