@@ -1,28 +1,22 @@
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+// src/app/layout.js
+import { Inter } from 'next/font/google';
+import './globals.css';
+import { Providers } from './providers'; // Import Providers
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: "Pergi Jauh",
-  description: "Warkop Enjoy",
+  title: 'Pergi Jauh',
+  description: 'A React-Tailwind app with admin panel',
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body className={inter.className}>
+        <Providers> {/* Wrap with Providers */}
+          {children}
+        </Providers>
       </body>
     </html>
   );
