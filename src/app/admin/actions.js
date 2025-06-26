@@ -1,12 +1,9 @@
-// src/app/admin/actions.js
 'use server';
 
 import { addProduct, updateProduct, deleteProduct } from '@/lib/data';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { writeFile } from 'fs/promises';
-import path from 'path';
-import crypto from 'crypto';
+import { uploadImageToSupabase } from '@/lib/uploadImage'; // Ganti handler upload ke Supabase
 
 export async function handleImageUpload(formData) {
   const file = formData.get('image');
@@ -14,16 +11,13 @@ export async function handleImageUpload(formData) {
     return '/images/no-image.png';
   }
 
-  const buffer = Buffer.from(await file.arrayBuffer());
-  const ext = file.name.split('.').pop();
-  const fileName = `${crypto.randomUUID()}.${ext}`;
-  const uploadDir = path.join(process.cwd(), 'public', 'images');
-
-  const filePath = path.join(uploadDir, fileName);
-  await writeFile(filePath, buffer);
-
-  // Return path relative to public
-  return `/images/${fileName}`;
+  try {
+    const imageUrl = await uploadImageToSupabase(file);
+    return imageUrl || '/images/no-image.png';
+  } catch (error) {
+    console.error('Upload ke Supabase gagal:', error);
+    return '/images/no-image.png';
+  }
 }
 
 export async function createProductAction(prevState, formData) {
@@ -33,7 +27,7 @@ export async function createProductAction(prevState, formData) {
   const weight = formData.get('weight');
   const condition = formData.get('condition');
   const category = formData.get('category');
-  const productDetail = formData.get('productDetail'); // Ambil field baru
+  const productDetail = formData.get('productDetail');
 
   if (!name || isNaN(price) || !availability) {
     return { message: 'Missing required fields: name, price, availability' };
@@ -49,7 +43,7 @@ export async function createProductAction(prevState, formData) {
     weight,
     condition,
     category,
-    productDetail, // Sertakan field baru
+    productDetail,
   };
 
   try {
@@ -60,6 +54,7 @@ export async function createProductAction(prevState, formData) {
     console.error("Failed to create product:", error);
     return { message: "Failed to create product. Please try again." };
   }
+
   redirect('/admin');
 }
 
@@ -71,7 +66,7 @@ export async function updateProductAction(prevState, formData) {
   const weight = formData.get('weight');
   const condition = formData.get('condition');
   const category = formData.get('category');
-  const productDetail = formData.get('productDetail'); // Ambil field baru
+  const productDetail = formData.get('productDetail');
 
   if (!id || !name || isNaN(price) || !availability) {
     return { message: 'Missing required fields: id, name, price, availability' };
@@ -92,7 +87,7 @@ export async function updateProductAction(prevState, formData) {
     weight,
     condition,
     category,
-    productDetail, // Sertakan field baru
+    productDetail,
   };
 
   try {
@@ -104,6 +99,7 @@ export async function updateProductAction(prevState, formData) {
     console.error("Failed to update product:", error);
     return { message: "Failed to update product. Please try again." };
   }
+
   redirect('/admin');
 }
 
