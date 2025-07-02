@@ -2,7 +2,7 @@
 import Header from '../components/Header';
 import ProductGrid from '../components/ProductGrid';
 import Section1 from '@/components/Section1';
-import { getProducts } from '@/lib/data'; // Pastikan ini benar
+import { getProducts, getEvents } from '@/lib/data'; // Pastikan ini benar
 
 export default async function Home() {
   const products = await getProducts();
@@ -13,6 +13,8 @@ export default async function Home() {
     category,
     items: products.filter((p) => p.category?.toLowerCase() === category.toLowerCase()),
   }));
+
+
 
   return (
     <div className="min-h-screen bg-gray-50">

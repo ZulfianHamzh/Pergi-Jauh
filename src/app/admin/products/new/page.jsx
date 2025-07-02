@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useActionState } from 'react'; // <- import benar
+import React from 'react';
+import { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { createProductAction } from '../../actions'; // Sesuaikan path jika perlu
 import Link from 'next/link';
@@ -26,10 +27,11 @@ export default function NewProductPage() {
   const [state, formAction] = useActionState(createProductAction, initialState);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6 flex justify-center items-center">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+    <div className="min-h-screen bg-gray-50 p-6 flex justify-center items-start">
+      <div className="bg-white p-6 md:p-8 rounded-lg shadow-md w-full max-w-4xl">
         <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">Tambah Produk Baru</h1>
-        <form action={formAction} className="space-y-4">
+
+        <form action={formAction} className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nama Produk</label>
             <input
@@ -115,7 +117,7 @@ export default function NewProductPage() {
             </select>
           </div>
 
-          <div>
+          <div className="md:col-span-2">
             <label htmlFor="productDetail" className="block text-sm font-medium text-gray-700">Detail Produk</label>
             <textarea
               id="productDetail"
@@ -126,13 +128,18 @@ export default function NewProductPage() {
             ></textarea>
           </div>
 
-          {state?.message && <p className="text-red-500 text-sm mt-2">{state.message}</p>}
-          <SubmitButton />
+          {state?.message && (
+            <p className="text-red-500 text-sm mt-2 md:col-span-2">{state.message}</p>
+          )}
 
-          <Link href="/admin" className="block text-center text-blue-600 hover:underline mt-4">
-            Kembali ke Admin
-          </Link>
+          <div className="md:col-span-2">
+            <SubmitButton />
+          </div>
         </form>
+
+        <Link href="/admin" className="block text-center text-blue-600 hover:underline mt-6">
+          Kembali ke Admin
+        </Link>
       </div>
     </div>
   );

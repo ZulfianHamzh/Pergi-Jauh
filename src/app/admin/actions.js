@@ -1,6 +1,6 @@
 'use server';
 
-import { addProduct, updateProduct, deleteProduct } from '@/lib/data';
+import { addProduct, updateProduct, deleteProduct, addEvent, updateEvent, deleteEvent } from '@/lib/data';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { uploadImageToSupabase } from '@/lib/uploadImage'; // Ganti handler upload ke Supabase
@@ -117,4 +117,81 @@ export async function deleteProductAction(formData) {
     console.error("Failed to delete product:", error);
     return { message: "Failed to delete product. Please try again." };
   }
+}
+
+// Tambahan di bagian akhir file actions.js
+
+// --- EVENT UPDATE ---
+export async function updateEventAction(prevState, formData) {
+  const id = formData.get('id');
+  const title = formData.get('title');
+
+  if (!id || !title) {
+    return { message: 'ID dan Judul event wajib diisi.' };
+  }
+
+  const file = formData.get('image');
+  let imagePath = formData.get('currentImage');
+
+  if (file && file.size > 0) {
+    imagePath = await handleImageUpload(formData);
+  }
+
+  const updatedFields = {
+    title,
+    image: imagePath,
+  };
+
+  try {
+    await updateEvent(id, updatedFields);
+    revalidatePath('/admin');
+    revalidatePath(`/admin/events/${id}/edit`);
+  } catch (error) {
+    console.error("Gagal mengupdate event:", error);
+    return { message: "Gagal mengupdate event. Coba lagi nanti." };
+  }
+
+  redirect('/admin');
+}
+
+// --- EVENT DELETE ---
+export async function deleteEventAction(formData) {
+  const id = formData.get('id');
+  if (!id) {
+    return { message: 'Event ID tidak ditemukan.' };
+  }
+
+  try {
+    await deleteEvent(id);
+    revalidatePath('/admin');
+  } catch (error) {
+    console.error("Gagal menghapus event:", error);
+    return { message: "Gagal menghapus event. Coba lagi nanti." };
+  }
+}
+
+// --- EVENT ---
+export async function createEventAction(prevState, formData) {
+  const title = formData.get('title');
+
+  if (!title) {
+    return { message: 'Judul event wajib diisi.' };
+  }
+
+  const imagePath = await handleImageUpload(formData);
+
+  const newEvent = {
+    title,
+    image: imagePath,
+  };
+
+  try {
+    await addEvent(newEvent);
+    revalidatePath('/admin');
+  } catch (error) {
+    console.error("Gagal menambah event:", error);
+    return { message: "Gagal menambah event. Coba lagi nanti." };
+  }
+
+  redirect('/admin');
 }

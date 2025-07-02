@@ -64,3 +64,67 @@ export async function deleteProduct(id) {
     return false;
   }
 }
+
+// --- Event CRUD Operations ---
+export async function getEvents() {
+  try {
+    const events = await prisma.event.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+    return events;
+  } catch (error) {
+    console.error("Error fetching events:", error);
+    return [];
+  }
+}
+
+export async function getEventById(id) {
+  try {
+    const event = await prisma.event.findUnique({
+      where: { id },
+    });
+    return event;
+  } catch (error) {
+    console.error(`Error fetching event by ID ${id}:`, error);
+    return null;
+  }
+}
+
+export async function addEvent(newEventData) {
+  try {
+    const event = await prisma.event.create({
+      data: newEventData,
+    });
+    return event;
+  } catch (error) {
+    console.error("Error adding event:", error);
+    throw error;
+  }
+}
+
+export async function updateEvent(id, updatedFields) {
+  try {
+    const event = await prisma.event.update({
+      where: { id },
+      data: updatedFields,
+    });
+    return event;
+  } catch (error) {
+    console.error(`Error updating event ID ${id}:`, error);
+    throw error;
+  }
+}
+
+export async function deleteEvent(id) {
+  try {
+    await prisma.event.delete({
+      where: { id },
+    });
+    return true;
+  } catch (error) {
+    console.error(`Error deleting event ID ${id}:`, error);
+    return false;
+  }
+}
