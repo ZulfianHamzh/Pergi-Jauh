@@ -2,6 +2,7 @@
 import Header from '../components/Header';
 import ProductGrid from '../components/ProductGrid';
 import Section1 from '@/components/Section1';
+import Location from '@/components/Location';
 import { getProducts, getEvents } from '@/lib/data'; // Pastikan ini benar
 
 export default async function Home() {
@@ -27,6 +28,7 @@ export default async function Home() {
             <ProductGrid products={items} />
           </div>
         ))}
+        <Location />
       </main>
     </div>
   );
