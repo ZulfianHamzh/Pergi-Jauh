@@ -19,7 +19,7 @@ export default async function Home() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      <main className="container mx-auto px-1 py-6">
+      <main className="container mx-auto px-4 py-6">
         <Section1 />
         {categorizedProducts.map(({ category, items }) => (
           <div key={category} className="mb-10">
