@@ -17,10 +17,9 @@ export default async function Section1() {
 
   return (
     <div>
-      <h1 className="flex justify-center flex-nowrap items-center flex-col text-black text-3xl font-semibold">
+      <h1 className="flex justify-center flex-nowrap items-center flex-col text-black text-3xl font-semibold mb-2">
         Wilujeng Sumping
       </h1>
-      <br />
       <div className="flex flex-col items-center">
         <Carousel
           items={carouselItems}
