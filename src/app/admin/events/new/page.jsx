@@ -41,6 +41,28 @@ export default function NewEventPage() {
           </div>
 
           <div>
+            <label htmlFor="detailEvent" className="block text-sm font-medium text-gray-700">Detail Event</label>
+            <textarea
+              id="detailEvent"
+              name="detailEvent"
+              rows="4"
+              placeholder="Masukkan informasi detail, seperti link pendaftaran atau deskripsi singkat event..."
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+            ></textarea>
+          </div>
+          <div>
+  <label htmlFor="linkPendaftaran" className="block text-sm font-medium text-gray-700">Link Pendaftaran</label>
+  <input
+    type="url"
+    id="linkPendaftaran"
+    name="linkPendaftaran"
+    placeholder="https://..."
+    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+  />
+</div>
+
+
+          <div>
             <label htmlFor="image" className="block text-sm font-medium text-gray-700">Gambar Event</label>
             <input
               type="file"
@@ -53,6 +75,7 @@ export default function NewEventPage() {
           </div>
 
           {state?.message && <p className="text-red-500 text-sm">{state.message}</p>}
+
           <SubmitButton />
 
           <Link href="/admin" className="block text-center text-blue-600 hover:underline mt-4">

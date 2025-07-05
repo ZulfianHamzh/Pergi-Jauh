@@ -2,7 +2,7 @@
 
 import { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
-import { updateEventAction,deleteEventAction } from '@/app/admin/actions';
+import { updateEventAction, deleteEventAction } from '@/app/admin/actions';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -29,10 +29,12 @@ export default function EditEventForm({ event }) {
   return (
     <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-2xl mx-auto">
       <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">Edit Event: {event.title}</h1>
+
       <form action={formAction} className="flex flex-col gap-4">
         <input type="hidden" name="id" value={event.id} />
         <input type="hidden" name="currentImage" value={event.image} />
 
+        {/* Judul Event */}
         <div>
           <label htmlFor="title" className="block text-sm font-medium text-gray-700">Judul Event</label>
           <input
@@ -45,6 +47,33 @@ export default function EditEventForm({ event }) {
           />
         </div>
 
+        {/* Detail Event */}
+        <div>
+          <label htmlFor="detailEvent" className="block text-sm font-medium text-gray-700">Detail Event</label>
+          <textarea
+            id="detailEvent"
+            name="detailEvent"
+            required
+            rows={4}
+            defaultValue={event.detailEvent || ''}
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+          />
+        </div>
+
+        {/* Link Pendaftaran */}
+        <div>
+          <label htmlFor="linkPendaftaran" className="block text-sm font-medium text-gray-700">Link Pendaftaran</label>
+          <input
+            type="url"
+            id="linkPendaftaran"
+            name="linkPendaftaran"
+            placeholder="https://contoh.com/daftar"
+            defaultValue={event.linkPendaftaran || ''}
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+          />
+        </div>
+
+        {/* Gambar */}
         <div>
           <label htmlFor="image" className="block text-sm font-medium text-gray-700">Gambar Event (Pilih Baru)</label>
           <input
@@ -72,21 +101,22 @@ export default function EditEventForm({ event }) {
 
         <SubmitButton />
       </form>
-      {/* FORM HAPUS EVENT */}
-            <form action={deleteEventAction} className="mt-4">
-              <input type="hidden" name="id" value={event.id} />
-              <button
-                type="submit"
-                className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-colors duration-200"
-                onClick={(e) => {
-                  if (!confirm('Yakin ingin menghapus event ini?')) {
-                    e.preventDefault();
-                  }
-                }}
-              >
-                Hapus Event
-              </button>
-            </form>
+
+      {/* Tombol Hapus Event */}
+      <form action={deleteEventAction} className="mt-4">
+        <input type="hidden" name="id" value={event.id} />
+        <button
+          type="submit"
+          className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-colors duration-200"
+          onClick={(e) => {
+            if (!confirm('Yakin ingin menghapus event ini?')) {
+              e.preventDefault();
+            }
+          }}
+        >
+          Hapus Event
+        </button>
+      </form>
 
       <Link href="/admin" className="block text-center text-blue-600 hover:underline mt-6">
         Kembali ke Admin

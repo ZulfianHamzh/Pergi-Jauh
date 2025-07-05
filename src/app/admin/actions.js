@@ -1,9 +1,12 @@
 'use server';
 
-import { addProduct, updateProduct, deleteProduct, addEvent, updateEvent, deleteEvent } from '@/lib/data';
+import {
+  addProduct, updateProduct, deleteProduct,
+  addEvent, updateEvent, deleteEvent
+} from '@/lib/data';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { uploadImageToSupabase } from '@/lib/uploadImage'; // Ganti handler upload ke Supabase
+import { uploadImageToSupabase } from '@/lib/uploadImage';
 
 export async function handleImageUpload(formData) {
   const file = formData.get('image');
@@ -20,6 +23,7 @@ export async function handleImageUpload(formData) {
   }
 }
 
+// --- PRODUCT CREATE ---
 export async function createProductAction(prevState, formData) {
   const name = formData.get('name');
   const price = parseFloat(formData.get('price'));
@@ -58,6 +62,7 @@ export async function createProductAction(prevState, formData) {
   redirect('/admin');
 }
 
+// --- PRODUCT UPDATE ---
 export async function updateProductAction(prevState, formData) {
   const id = formData.get('id');
   const name = formData.get('name');
@@ -103,6 +108,7 @@ export async function updateProductAction(prevState, formData) {
   redirect('/admin');
 }
 
+// --- PRODUCT DELETE ---
 export async function deleteProductAction(formData) {
   const id = formData.get('id');
   if (!id) {
@@ -119,12 +125,43 @@ export async function deleteProductAction(formData) {
   }
 }
 
-// Tambahan di bagian akhir file actions.js
+// --- EVENT CREATE ---
+export async function createEventAction(prevState, formData) {
+  const title = formData.get('title');
+  const detailEvent = formData.get('detailEvent');
+  const linkPendaftaran = formData.get('linkPendaftaran');
+
+  if (!title) {
+    return { message: 'Judul event wajib diisi.' };
+  }
+
+  const imagePath = await handleImageUpload(formData);
+
+  const newEvent = {
+    title,
+    image: imagePath,
+    detailEvent,
+    linkPendaftaran,
+  };
+
+  try {
+    await addEvent(newEvent);
+    revalidatePath('/admin');
+  } catch (error) {
+    console.error("Gagal menambah event:", error);
+    return { message: "Gagal menambah event. Coba lagi nanti." };
+  }
+
+  redirect('/admin');
+}
 
 // --- EVENT UPDATE ---
 export async function updateEventAction(prevState, formData) {
   const id = formData.get('id');
   const title = formData.get('title');
+  const detailEvent = formData.get('detailEvent');
+  const linkPendaftaran = formData.get('linkPendaftaran');
+
 
   if (!id || !title) {
     return { message: 'ID dan Judul event wajib diisi.' };
@@ -140,6 +177,8 @@ export async function updateEventAction(prevState, formData) {
   const updatedFields = {
     title,
     image: imagePath,
+    detailEvent,
+    linkPendaftaran,
   };
 
   try {
@@ -168,30 +207,4 @@ export async function deleteEventAction(formData) {
     console.error("Gagal menghapus event:", error);
     return { message: "Gagal menghapus event. Coba lagi nanti." };
   }
-}
-
-// --- EVENT ---
-export async function createEventAction(prevState, formData) {
-  const title = formData.get('title');
-
-  if (!title) {
-    return { message: 'Judul event wajib diisi.' };
-  }
-
-  const imagePath = await handleImageUpload(formData);
-
-  const newEvent = {
-    title,
-    image: imagePath,
-  };
-
-  try {
-    await addEvent(newEvent);
-    revalidatePath('/admin');
-  } catch (error) {
-    console.error("Gagal menambah event:", error);
-    return { message: "Gagal menambah event. Coba lagi nanti." };
-  }
-
-  redirect('/admin');
 }

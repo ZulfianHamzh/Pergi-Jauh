@@ -5,9 +5,7 @@ import prisma from './prisma'; // Import prisma client
 export async function getProducts() {
   try {
     const products = await prisma.product.findMany({
-      orderBy: {
-        createdAt: 'desc',
-      },
+      orderBy: { createdAt: 'desc' },
     });
     return products;
   } catch (error) {
@@ -69,9 +67,7 @@ export async function deleteProduct(id) {
 export async function getEvents() {
   try {
     const events = await prisma.event.findMany({
-      orderBy: {
-        createdAt: 'desc',
-      },
+      orderBy: { createdAt: 'desc' },
     });
     return events;
   } catch (error) {
@@ -95,7 +91,12 @@ export async function getEventById(id) {
 export async function addEvent(newEventData) {
   try {
     const event = await prisma.event.create({
-      data: newEventData,
+      data: {
+        title: newEventData.title,
+        image: newEventData.image,
+        linkPendaftaran: newEventData.linkPendaftaran,
+        detailEvent: newEventData.detailEvent || '', // tambahkan default jika kosong
+      },
     });
     return event;
   } catch (error) {
@@ -108,7 +109,12 @@ export async function updateEvent(id, updatedFields) {
   try {
     const event = await prisma.event.update({
       where: { id },
-      data: updatedFields,
+      data: {
+        title: updatedFields.title,
+        image: updatedFields.image,
+        linkPendaftaran: updatedFields.linkPendaftaran,
+        detailEvent: updatedFields.detailEvent || '', // tambahkan default jika kosong
+      },
     });
     return event;
   } catch (error) {

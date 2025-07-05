@@ -69,10 +69,12 @@ model Product {
 }
 
 model Event {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  title     String
-  image     String
-  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title           String
+  image           String
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
+  detailEvent     String?  @db.VarChar
+  linkPendaftaran String?
 }
 
 enum Availability {
