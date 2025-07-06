@@ -24,9 +24,11 @@ export default async function ProductDetailPage({ params }) {
             <span className="font-bold text-lg text-gray-700">{product.name}</span>
           </div>
           <button className="text-gray-600 hover:text-gray-800">
+            <a href="/">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.882 13.118 9 12.842 9 12.5c0-.342-.118-.618-.316-.842l-4.708-4.708a1 1 0 010-1.414l.707-.707a1 1 0 011.414 0l4.708 4.708c.224.198.5.316.842.316s.618-.118.842-.316l4.708-4.708a1 1 0 011.414 0l.707.707a1 1 0 010 1.414l-4.708 4.708c-.198.224-.316.5-.316.842s.118.618.316.842l4.708 4.708a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414 0l-4.708-4.708c-.224-.198-.5-.316-.842-.316s-.618.118-.842.316l-4.708 4.708a1 1 0 01-1.414 0l-.707-.707a1 1 0 010-1.414l4.708-4.708z" />
             </svg>
+            </a>
           </button>
         </div>
       </header>
@@ -37,7 +39,7 @@ export default async function ProductDetailPage({ params }) {
     src={product.image || '/images/no-image.png'}
     alt={product.name}
     fill
-    className="object-cover"
+    className="object-cover rounded-xl"
     priority
   />
 </div>

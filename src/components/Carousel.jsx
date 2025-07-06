@@ -95,8 +95,8 @@ export default function Carousel({
       ref={containerRef}
       className={`relative overflow-hidden p-4 ${
         round
-          ? "rounded-full border border-white"
-          : "rounded-[24px] bg-white/10 backdrop-blur-lg border border-white/30 shadow-lg  mb-5"
+          ? "rounded-full border"
+          : "rounded-[24px] shadow-xl mb-5"
       }`}
       style={{
         width: `${baseWidth}px`,
@@ -144,7 +144,7 @@ export default function Carousel({
                 className="relative shrink-0 flex overflow-hidden cursor-pointer rounded-[12px]"
                 style={{
                   width: itemWidth,
-                  height: round ? itemWidth : 150,
+                  height: round ? itemWidth : 200,
                   rotateY,
                   ...(round && { borderRadius: "50%" }),
                 }}
@@ -188,6 +188,7 @@ export default function Carousel({
           ))}
         </div>
       </div>
+      <h1 className="text-black text-sm font-light mt-2 text-left">*klik gambar untuk info tentang event</h1>
     </div>
   );
 }

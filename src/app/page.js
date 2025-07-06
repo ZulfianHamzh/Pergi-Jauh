@@ -32,6 +32,9 @@ export default async function Home() {
         ))}
         <Location />
       </main>
+      <div className='flex flex-col bg-black text-[bisque] text-center font-semibold p-4'> 
+        <p>Copyright Pergi Jauh©2025</p>
+      </div>
     </div>
   );
 }

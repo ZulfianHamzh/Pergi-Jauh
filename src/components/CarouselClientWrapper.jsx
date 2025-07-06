@@ -19,25 +19,25 @@ export default function CarouselClientWrapper({ items }) {
           <div className="bg-white rounded-lg p-6 max-w-lg w-full shadow-xl relative mx-4">
             <button
               onClick={() => setSelectedEvent(null)}
-              className="absolute top-4 right-4 text-2xl font-bold text-gray-600 hover:text-red-500"
+              className="absolute top-4 right-4 text-3xl font-bold text-gray-600 hover:text-red-500"
             >
               &times;
             </button>
 
-            <div className="p-6">
+            <div className="p-4">
               <h2 className="text-2xl font-bold mb-4 text-center text-gray-800">
                 {selectedEvent.title || 'Tanpa Judul'}
               </h2>
 
-              <div className="w-full h-60 md:h-80 overflow-hidden rounded-md mb-4">
+              <div className="w-full h-60 md:h-80 overflow-hidden rounded-md">
                 <img
                   src={selectedEvent.image || '/images/no-image.png'}
                   alt={selectedEvent.title || 'Gambar Event'}
-                  className="w-full h-full object-cover"
+                  className="w-fit h-fit object-cover rounded-xl"
                 />
               </div>
-
-              <p className="text-gray-700 whitespace-pre-line mb-6">
+                <h2 className="text-2xl mb-1 font-bold text-center text-gray-800"> Tentang Event</h2>
+              <p className="bg-gray-200 p-4 rounded-xl text-gray-700 whitespace-pre-line mb-6">
                 {selectedEvent.detailEvent || 'Tidak ada deskripsi.'}
               </p>
 
@@ -62,7 +62,7 @@ export default function CarouselClientWrapper({ items }) {
       <div className="flex flex-col items-center relative z-10">
         <Carousel
           items={withClickItems}
-          baseWidth={350}
+          baseWidth={400}
           autoplay={true}
           autoplayDelay={4000}
           pauseOnHover={true}
