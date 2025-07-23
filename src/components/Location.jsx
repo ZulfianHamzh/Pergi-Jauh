@@ -3,8 +3,8 @@ import React from 'react';
 
 export default function Location() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-fit rounded-xl inset-0 bg-gradient-to-b from-white to-gray-100 p-2">
-      <h2 className="text-3xl font-bold text-gray-800 mb-6 mt-6">Lokasi Warkop Kami</h2>
+    <div className="flex flex-col items-center justify-center min-h-fit rounded-xl inset-0  p-2">
+      <h2 className="text-3xl font-bold text-white mb-6 mt-6">Lokasi Warkop Kami</h2>
       
       <div className="w-full max-w-3xl rounded-[24px] bg-white/10 backdrop-blur-lg border border-white/30 shadow-lg overflow-hidden">
         <iframe

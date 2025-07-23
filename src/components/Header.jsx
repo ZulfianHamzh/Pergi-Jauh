@@ -8,11 +8,11 @@ export default function Header() {
       <div className="container mx-auto flex items-center justify-between px-4">
         <div className="flex items-center space-x-2">
           <Image
-            src="/images/PjLogo.png" // Path relatif ke folder public
+            src="/images/Logo.png" // Path relatif ke folder public
             alt="PJ Logo"
-            width={32} // Sesuaikan lebar
-            height={32} // Sesuaikan tinggi
-            className="h-8 w-auto" // Tailwind untuk tinggi dan lebar otomatis
+            width={128} // Sesuaikan lebar
+            height={128} // Sesuaikan tinggi
+            className="h-12 w-auto" // Tailwind untuk tinggi dan lebar otomatis
           />
           <span className="font-bold text-lg text-gray-700">Pergi Jauh</span>
         </div>

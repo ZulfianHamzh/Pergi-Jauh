@@ -24,7 +24,7 @@ export default function NewEventPage() {
   const [state, formAction] = useActionState(createEventAction, initialState);
 
   return (
-    <div className="min-h-screen flex justify-center items-start bg-gray-50 p-6">
+    <div className="min-h-screen flex justify-center items-start bg-[#679CBC] p-6">
       <div className="bg-white p-6 md:p-8 rounded-lg shadow-md w-full max-w-xl">
         <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">Tambah Event Baru</h1>
 
@@ -36,7 +36,7 @@ export default function NewEventPage() {
               id="title"
               name="title"
               required
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 text-gray-700"
             />
           </div>
 
@@ -47,7 +47,7 @@ export default function NewEventPage() {
               name="detailEvent"
               rows="4"
               placeholder="Masukkan informasi detail, seperti link pendaftaran atau deskripsi singkat event..."
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 text-gray-700"
             ></textarea>
           </div>
           <div>
@@ -57,7 +57,7 @@ export default function NewEventPage() {
     id="linkPendaftaran"
     name="linkPendaftaran"
     placeholder="https://..."
-    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 text-gray-700"
   />
 </div>
 
@@ -69,7 +69,7 @@ export default function NewEventPage() {
               id="image"
               name="image"
               accept="image/*"
-              className="mt-1 block w-full text-sm text-gray-500 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+              className="mt-1 block w-full text-sm text-gray-500 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 text-gray-700"
             />
             <p className="mt-1 text-xs text-gray-500">Maksimal Ukuran Gambar 1MB.</p>
           </div>

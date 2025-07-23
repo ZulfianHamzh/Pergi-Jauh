@@ -93,17 +93,17 @@ export default function Carousel({
   return (
     <div
       ref={containerRef}
-      className={`relative overflow-hidden p-4 ${
+      className={`relative overflow-hidden  p-4 ${
         round
-          ? "rounded-full border"
-          : "rounded-[24px] shadow-xl mb-5"
+          // ? "rounded-full border"
+          // : "rounded-[24px] shadow-xl mb-5"
       }`}
       style={{
         width: `${baseWidth}px`,
         ...(round && { height: `${baseWidth}px` }),
       }}
     >
-      <h1 className="text-black text-2xl font-semibold mb-2 text-center">Event Berlangsung</h1>
+      <h1 className="text-white text-2xl font-semibold mb-2 text-center">Event Berlangsung</h1>
 
       {/* Carousel Track */}
       <motion.div
@@ -188,7 +188,7 @@ export default function Carousel({
           ))}
         </div>
       </div>
-      <h1 className="text-black text-sm font-light mt-2 text-left">*klik gambar untuk info tentang event</h1>
+      <h1 className="text-white text-sm font-normal mt-2 text-left">*klik gambar untuk info tentang event</h1>
     </div>
   );
 }

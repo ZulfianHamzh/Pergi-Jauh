@@ -47,7 +47,7 @@ export default function EditProductForm({ product }) {
             name="name"
             required
             defaultValue={product.name}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 text-gray-700"
           />
         </div>
 
@@ -62,7 +62,7 @@ export default function EditProductForm({ product }) {
             required
             min="0"
             defaultValue={product.price}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 text-gray-700"
           />
         </div>
 
@@ -74,7 +74,7 @@ export default function EditProductForm({ product }) {
             id="availability"
             name="availability"
             defaultValue={product.availability}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 text-gray-700"
           >
             <option value="Tersedia">Tersedia</option>
             <option value="Habis">Habis</option>
@@ -111,7 +111,7 @@ export default function EditProductForm({ product }) {
             id="weight"
             name="weight"
             defaultValue={product.weight}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 text-gray-700"
           />
         </div>
 
@@ -124,7 +124,7 @@ export default function EditProductForm({ product }) {
             id="condition"
             name="condition"
             defaultValue={product.condition}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 text-gray-700"
           />
         </div>
 
@@ -136,7 +136,7 @@ export default function EditProductForm({ product }) {
             id="category"
             name="category"
             defaultValue={product.category}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 text-gray-700"
           >
             <option value="Coffee">Coffee</option>
             <option value="Beverages">Beverages</option>
@@ -154,7 +154,7 @@ export default function EditProductForm({ product }) {
             name="productDetail"
             rows="4"
             defaultValue={product.productDetail || ''}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 text-gray-700"
           />
         </div>
 

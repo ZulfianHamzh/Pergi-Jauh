@@ -19,14 +19,14 @@ export default async function Home() {
 
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#679CBC]">
       <Header />
       <main className="container mx-auto px-4 py-6">
         <Section1 />
         <EventModal />
         {categorizedProducts.map(({ category, items }) => (
           <div key={category} className="mb-10">
-            <h2 className="text-black text-xl font-semibold mb-4">{category}</h2>
+            <h2 className="text-white text-xl font-semibold mb-4">{category}</h2>
             <ProductGrid products={items} />
           </div>
         ))}

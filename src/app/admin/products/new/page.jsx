@@ -27,7 +27,7 @@ export default function NewProductPage() {
   const [state, formAction] = useActionState(createProductAction, initialState);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6 flex justify-center items-start">
+    <div className="min-h-screen bg-[#679CBC] p-6 flex justify-center items-start">
       <div className="bg-white p-6 md:p-8 rounded-lg shadow-md w-full max-w-4xl">
         <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">Tambah Produk Baru</h1>
 
@@ -39,7 +39,7 @@ export default function NewProductPage() {
               id="name"
               name="name"
               required
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700"
             />
           </div>
 
@@ -52,7 +52,7 @@ export default function NewProductPage() {
               required
               min="0"
               step="any"
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700"
             />
           </div>
 
@@ -62,7 +62,7 @@ export default function NewProductPage() {
               id="availability"
               name="availability"
               required
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700"
             >
               <option value="Tersedia">Tersedia</option>
               <option value="Habis">Habis</option>
@@ -76,7 +76,7 @@ export default function NewProductPage() {
               id="image"
               name="image"
               accept="image/*"
-              className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+              className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 text-gray-700"
             />
             <p className="mt-1 text-xs text-gray-500">Catatan: Untuk demo ini, gambar akan menggunakan placeholder.</p>
           </div>
@@ -87,7 +87,7 @@ export default function NewProductPage() {
               type="text"
               id="weight"
               name="weight"
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700"
             />
           </div>
 
@@ -97,7 +97,7 @@ export default function NewProductPage() {
               type="text"
               id="condition"
               name="condition"
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700"
             />
           </div>
 
@@ -106,7 +106,7 @@ export default function NewProductPage() {
             <select
               id="category"
               name="category"
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700"
               defaultValue=""
             >
               <option value="" disabled>Pilih Kategori</option>
@@ -123,7 +123,7 @@ export default function NewProductPage() {
               id="productDetail"
               name="productDetail"
               rows="4"
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700"
               placeholder="Masukkan deskripsi detail produk di sini..."
             ></textarea>
           </div>

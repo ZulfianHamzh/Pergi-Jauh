@@ -62,7 +62,7 @@ export default function CarouselClientWrapper({ items }) {
       <div className="flex flex-col items-center relative z-10">
         <Carousel
           items={withClickItems}
-          baseWidth={400}
+          baseWidth={450}
           autoplay={true}
           autoplayDelay={4000}
           pauseOnHover={true}

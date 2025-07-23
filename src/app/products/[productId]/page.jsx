@@ -12,7 +12,7 @@ export default async function ProductDetailPage({ params }) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-10">
+    <div className="min-h-screen bg-[#679CBC] pb-10">
       <header className="bg-white shadow-sm py-4 mb-6">
         <div className="container mx-auto flex items-center justify-between px-4">
           <div className="flex items-center space-x-2">

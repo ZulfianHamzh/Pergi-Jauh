@@ -13,7 +13,7 @@ export default async function EditEventPage({ params }) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6 flex justify-center items-center">
+    <div className="min-h-screen bg-[#679CBC] p-6 flex justify-center items-center">
         <EditEventForm event={event} />;
     </div>
   ) 
