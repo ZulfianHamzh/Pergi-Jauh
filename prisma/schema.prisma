@@ -84,7 +84,7 @@ enum Availability {
 
 enum Category {
   Coffee
-  Non-Coffe
+  NonCoffe
   Foods
   Snacks
   Paket
