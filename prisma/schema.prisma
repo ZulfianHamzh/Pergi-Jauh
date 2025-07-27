@@ -84,7 +84,8 @@ enum Availability {
 
 enum Category {
   Coffee
-  Beverages
-  Tea
-  Snack
+  Non-Coffe
+  Foods
+  Snacks
+  Paket
 }
