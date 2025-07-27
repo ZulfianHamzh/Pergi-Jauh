@@ -9,7 +9,7 @@ import EventModal from '@/components/EventModal';
 export default async function Home() {
   const products = await getProducts();
 
-  const categories = ['Coffee', 'Beverages', 'Tea', 'Snack'];
+  const categories = ['Coffe', 'NonCoffe', 'Foods', 'Snacks', 'Paket'];
 
   const categorizedProducts = categories.map((category) => ({
     category,
