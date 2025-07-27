@@ -110,10 +110,10 @@ export default function NewProductPage() {
               defaultValue=""
             >
               <option value="" disabled>Pilih Kategori</option>
-              <option value="Coffee">Coffee</option>
-              <option value="Beverages">Beverages</option>
-              <option value="Tea">Tea</option>
-              <option value="Snack">Snack</option>
+              <option value="Coffe">Coffe</option>
+              <option value="Non-Coffe">Snack</option>
+              <option value="Foods">Foods</option>
+              <option value="Snacks">Snacks</option>
             </select>
           </div>
 
