@@ -162,10 +162,10 @@ export default function EditProductForm({ product }) {
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 text-gray-700"
           >
             <option value="Coffe">Coffe</option>
-            <option value="Non-Coffe">Non-Coffe</option>
+            <option value="NonCoffe">Non-Coffe</option>
             <option value="Foods">Foods</option>
             <option value="Snacks">Snacks</option>
-            <option value="Bingung Mau Apa?">Paket</option>
+            <option value="Paket">Paket</option>
           </select>
         </div>
 

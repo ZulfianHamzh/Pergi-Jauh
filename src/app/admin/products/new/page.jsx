@@ -111,10 +111,10 @@ export default function NewProductPage() {
             >
               <option value="" disabled>Pilih Kategori</option>
               <option value="Coffe">Coffe</option>
-              <option value="Non-Coffe">Non-Coffe</option>
+              <option value="NonCoffe">Non-Coffe</option>
               <option value="Foods">Foods</option>
               <option value="Snacks">Snacks</option>
-              <option value="Bingung Mau Apa?">Paket</option>
+              <option value="Paket">Paket</option>
             </select>
           </div>
 
