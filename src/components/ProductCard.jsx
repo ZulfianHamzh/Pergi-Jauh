@@ -1,23 +1,31 @@
 // src/components/ProductCard.jsx
-import React from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
+import React from "react";
+import Image from "next/image";
+import Link from "next/link";
 
-export default function ProductCard({ id, imageSrc, name, price, availability }) {
+export default function ProductCard({
+  id,
+  imageSrc,
+  name,
+  price,
+  availability,
+}) {
   return (
     <Link href={`/products/${id}`} passHref>
       <div className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow duration-200 h-full flex flex-col">
-      <Image
-  src={imageSrc}
-  alt={name}
-  width={300}
-  height={300} // <== Ganti dari 192 ke 300
-  className="w-full aspect-square object-cover"
-/>
+        <Image
+          src={imageSrc}
+          alt={name}
+          width={300}
+          height={300} // <== Ganti dari 192 ke 300
+          className="w-full aspect-square object-cover"
+        />
 
         <div className="p-4 flex-grow text-center">
           <h3 className="text-lg font-medium text-gray-800 mb-1">{name}</h3>
-          <p className="text-gray-900 font-semibold mb-2">Rp{price.toLocaleString('id-ID')}</p>
+          <p className="text-gray-900 font-semibold mb-2">
+            Rp{price.toLocaleString("id-ID")}
+          </p>
           <p className="text-sm text-gray-500">{availability}</p>
         </div>
         <div className="px-4 pb-3 pt-1 text-center text-xs text-blue-600 font-medium border-t border-gray-100">
