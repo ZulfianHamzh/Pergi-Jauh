@@ -171,8 +171,8 @@ export default function NewProductPage() {
               <option value="" disabled>
                 Pilih Kategori
               </option>
-              <option value="Coffe">Coffe</option>
-              <option value="NonCoffe">Non-Coffe</option>
+              <option value="Coffee">Coffee</option>
+              <option value="NonCoffee">Non-Coffee</option>
               <option value="Foods">Foods</option>
               <option value="Snacks">Snacks</option>
               <option value="Paket">Paket</option>
