@@ -32,6 +32,7 @@ export async function createProductAction(prevState, formData) {
   const condition = formData.get('condition');
   const category = formData.get('category');
   const productDetail = formData.get('productDetail');
+  const stock = parseInt(formData.get('stock'));
 
   if (!name || isNaN(price) || !availability) {
     return { message: 'Missing required fields: name, price, availability' };
@@ -48,6 +49,7 @@ export async function createProductAction(prevState, formData) {
     condition,
     category,
     productDetail,
+    stock,
   };
 
   try {
@@ -72,6 +74,7 @@ export async function updateProductAction(prevState, formData) {
   const condition = formData.get('condition');
   const category = formData.get('category');
   const productDetail = formData.get('productDetail');
+  const stock = parseInt(formData.get('stock'));
 
   if (!id || !name || isNaN(price) || !availability) {
     return { message: 'Missing required fields: id, name, price, availability' };
@@ -93,6 +96,7 @@ export async function updateProductAction(prevState, formData) {
     condition,
     category,
     productDetail,
+    stock,
   };
 
   try {

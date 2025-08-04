@@ -36,7 +36,7 @@ export default async function AdminPage() {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Gambar</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Harga</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ketersediaan</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Stok</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kategori</th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Aksi</th>
                 </tr>
@@ -60,7 +60,7 @@ export default async function AdminPage() {
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-900 truncate max-w-xs">{product.name}</td>
                       <td className="px-6 py-4 text-sm text-gray-500">Rp{product.price.toLocaleString('id-ID')}</td>
-                      <td className="px-6 py-4 text-sm text-gray-500">{product.availability}</td>
+                      <td className="px-6 py-4 text-sm text-gray-500">{product.stock}</td>
                       <td className="px-6 py-4 text-sm text-gray-500">{product.category}</td>
                       <td className="px-6 py-4 text-right text-sm font-medium">
                         <Link href={`/admin/products/${product.id}/edit`} className="text-indigo-600 hover:text-indigo-900">Edit</Link>

@@ -4,7 +4,7 @@ import EditProductForm from './EditProductForm';
 import { notFound } from 'next/navigation';
 
 export default async function EditProductPage({ params }) {
-  const { productId } = params;
+  const { productId } = await params;
   const product = await getProductById(productId);
 
   if (!product) return notFound();

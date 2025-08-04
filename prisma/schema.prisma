@@ -64,9 +64,11 @@ model Product {
   condition     String?
   category      Category?
   productDetail String?
+  stock         Int          @default(0) // ✅ stok produk, default 0
   createdAt     DateTime     @default(now()) @db.Timestamptz(6)
   updatedAt     DateTime     @default(now()) @updatedAt @db.Timestamptz(6)
 }
+
 
 model Event {
   id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
