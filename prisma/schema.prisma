@@ -64,11 +64,10 @@ model Product {
   condition     String?
   category      Category?
   productDetail String?
-  stock         Int          @default(0) // ✅ stok produk, default 0
   createdAt     DateTime     @default(now()) @db.Timestamptz(6)
   updatedAt     DateTime     @default(now()) @updatedAt @db.Timestamptz(6)
+  stock         BigInt
 }
-
 
 model Event {
   id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
@@ -120,14 +119,22 @@ model users {
   created_at DateTime? @default(now()) @db.Timestamp(6)
 }
 
+model logs {
+  id          BigInt    @id @default(autoincrement())
+  error       String?
+  stack_trace String?
+  source      String?
+  created_at  DateTime? @default(now()) @db.Timestamptz(6)
+}
+
 enum Availability {
   Tersedia
   Habis
 }
 
 enum Category {
-  Coffe
-  NonCoffe
+  Coffee
+  NonCoffee
   Foods
   Snacks
   Paket
