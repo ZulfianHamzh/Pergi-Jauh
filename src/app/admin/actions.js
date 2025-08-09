@@ -2,7 +2,10 @@
 
 import {
   addProduct, updateProduct, deleteProduct,
-  addEvent, updateEvent, deleteEvent
+  addEvent, updateEvent, deleteEvent,
+  addProductCombination, 
+  updateProductCombination, 
+  deleteProductCombination 
 } from '@/lib/data';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -211,4 +214,106 @@ export async function deleteEventAction(formData) {
     console.error("Gagal menghapus event:", error);
     return { message: "Gagal menghapus event. Coba lagi nanti." };
   }
+}
+
+// --- PRODUCT COMBINATION ACTIONS ---
+
+// --- PRODUCT COMBINATION CREATE ---
+export async function createProductCombinationAction(prevState, formData) {
+  const name = formData.get('name');
+  const price = parseFloat(formData.get('price'));
+
+  if (!name || isNaN(price)) {
+    return { message: 'Missing required fields: name, price' };
+  }
+
+  let productIds = [];
+  try {
+    const selectedProductsJson = formData.get('selectedProducts');
+    if (selectedProductsJson) {
+      productIds = JSON.parse(selectedProductsJson);
+    }
+  } catch (e) {
+    console.error("Failed to parse selected products:", e);
+    return { message: "Invalid product selection data." };
+  }
+
+  if (productIds.length === 0) {
+      return { message: 'Please select at least one product.' };
+  }
+
+  const newCombinationData = { name, price, productIds };
+
+  try {
+    await addProductCombination(newCombinationData);
+    revalidatePath('/admin');
+    revalidatePath('/admin/kombinasi');
+  } catch (error) {
+    console.error("Failed to create product combination:", error);
+    return { message: "Failed to create product combination. Please try again." };
+  }
+
+  redirect('/admin/kombinasi');
+}
+
+// --- PRODUCT COMBINATION UPDATE ---
+export async function updateProductCombinationAction(prevState, formData) {
+  const id = formData.get('id');
+  const name = formData.get('name');
+  const price = parseFloat(formData.get('price'));
+
+  if (!id || !name || isNaN(price)) {
+    return { message: 'Missing required fields: id, name, price' };
+  }
+
+  let productIds = [];
+  try {
+    const selectedProductsJson = formData.get('selectedProducts');
+    if (selectedProductsJson) {
+      productIds = JSON.parse(selectedProductsJson);
+    }
+  } catch (e) {
+    console.error("Failed to parse selected products:", e);
+    return { message: "Invalid product selection data." };
+  }
+
+  if (productIds.length === 0) {
+      return { message: 'Please select at least one product.' };
+  }
+
+  const updatedCombinationData = { name, price, productIds };
+
+  try {
+    await updateProductCombination(id, updatedCombinationData);
+    revalidatePath('/admin');
+    revalidatePath('/admin/kombinasi');
+  } catch (error) {
+    console.error("Failed to update product combination:", error);
+    return { message: "Failed to update product combination. Please try again." };
+  }
+
+  redirect('/admin/kombinasi');
+}
+
+// --- PRODUCT COMBINATION DELETE ---
+export async function deleteProductCombinationAction(formData) {
+  const id = formData.get('id');
+  if (!id) {
+    return { message: 'Product Combination ID is missing.' };
+  }
+
+  try {
+    await deleteProductCombination(id);
+    revalidatePath('/admin');
+    revalidatePath('/admin/kombinasi');
+  } catch (error) {
+    console.error("Failed to delete product combination:", error);
+    return { message: "Failed to delete product combination. Please try again." };
+  }
+}
+
+export async function fetchAllProductsAction() {
+    // Karena ini adalah Server Action, kita bisa menggunakan Prisma di sini
+    const products = await getAllProducts(); // Fungsi dari lib/data.js
+    return products;
 }

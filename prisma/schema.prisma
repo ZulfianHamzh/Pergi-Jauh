@@ -55,18 +55,19 @@ model VerificationToken {
 }
 
 model Product {
-  id            String       @id @default(cuid())
-  name          String
-  price         Float
-  availability  Availability
-  image         String?
-  weight        String?
-  condition     String?
-  category      Category?
-  productDetail String?
-  createdAt     DateTime     @default(now()) @db.Timestamptz(6)
-  updatedAt     DateTime     @default(now()) @updatedAt @db.Timestamptz(6)
-  stock         BigInt
+  id                        String                      @id @default(cuid())
+  name                      String
+  price                     Float
+  availability              Availability
+  image                     String?
+  weight                    String?
+  condition                 String?
+  category                  Category?
+  productDetail             String?
+  createdAt                 DateTime                    @default(now()) @db.Timestamptz(6)
+  updatedAt                 DateTime                    @default(now()) @updatedAt @db.Timestamptz(6)
+  stock                     BigInt
+  Product_combination_items Product_combination_items[]
 }
 
 model Event {
@@ -79,13 +80,25 @@ model Event {
 }
 
 model Menu_Transaksi {
-  id           BigInt    @id @default(autoincrement())
-  id_transaksi String
-  nama_menu    String
-  harga_menu   Decimal   @db.Decimal(10, 2)
-  jumlah_menu  Int
-  created_at   DateTime? @default(now()) @db.Timestamptz(6)
-  Transaksi    Transaksi @relation(fields: [id_transaksi], references: [id_transaksi], onDelete: Cascade, onUpdate: NoAction, map: "fk_id_transaksi")
+  id                     BigInt    @id @default(autoincrement())
+  id_transaksi           String
+  nama_menu              String
+  harga_menu             Decimal   @db.Decimal(10, 2)
+  jumlah_menu            Int
+  created_at             DateTime? @default(now()) @db.Timestamptz(6)
+  topping_tambahan       String?
+  topping_kentang        String?
+  suhu                   String?
+  topping_tambahan_qty   Int?
+  topping_tambahan_harga Decimal?  @db.Decimal(10, 2)
+  topping_tambahan_total Decimal?  @db.Decimal(10, 2)
+  topping_kentang_qty    Int?
+  topping_kentang_harga  Decimal?  @db.Decimal(10, 2)
+  topping_kentang_total  Decimal?  @db.Decimal(10, 2)
+  suhu_minuman           String?
+  suhu_harga             Decimal?  @db.Decimal(10, 2)
+  suhu_total             Decimal?  @db.Decimal(10, 2)
+  Transaksi              Transaksi @relation(fields: [id_transaksi], references: [id_transaksi], onDelete: Cascade, onUpdate: NoAction, map: "fk_id_transaksi")
 
   @@index([id_transaksi], map: "idx_menu_transaksi_id_transaksi")
 }
@@ -102,6 +115,7 @@ model Transaksi {
   preferensi_kopi  String?
   topping_tambahan String?
   topping_kentang  String?
+  discount         Decimal?         @db.Decimal(10, 2)
   Menu_Transaksi   Menu_Transaksi[]
 
   @@index([atas_nama], map: "idx_transaksi_atas_nama")
@@ -125,6 +139,30 @@ model logs {
   stack_trace String?
   source      String?
   created_at  DateTime? @default(now()) @db.Timestamptz(6)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model Product_combination_items {
+  id                     String               @id(map: "product_combination_items_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  product_combination_id String               @db.Uuid
+  product_id             String
+  quantity               Int                  @default(1)
+  Product_combinations   Product_combinations @relation(fields: [product_combination_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_product_combination_items_combination")
+  Product                Product              @relation(fields: [product_id], references: [id], onUpdate: NoAction, map: "fk_product_combination_items_product")
+
+  @@unique([product_combination_id, product_id], map: "unique_combination_product")
+  @@index([product_combination_id], map: "idx_product_combination_items_combination_id")
+  @@index([product_id], map: "idx_product_combination_items_product_id")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model Product_combinations {
+  id                        String                      @id(map: "product_combinations_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                      String
+  price                     Float
+  created_at                DateTime                    @default(now()) @db.Timestamptz(6)
+  updated_at                DateTime                    @default(now()) @db.Timestamptz(6)
+  Product_combination_items Product_combination_items[]
 }
 
 enum Availability {
