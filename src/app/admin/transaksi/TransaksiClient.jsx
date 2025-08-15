@@ -78,8 +78,8 @@ const LogoutButton = () => (
   </button>
 );
 
-export default function TransaksiClient({ initialTransaksi }) {
-  const searchParams = useSearchParams();
+export default function TransaksiClient({ initialTransaksi, sortBy, sortOrder }) {
+  // const searchParams = useSearchParams();
   const router = useRouter();
 
   const [transaksi, setTransaksi] = useState(initialTransaksi);
@@ -90,8 +90,8 @@ export default function TransaksiClient({ initialTransaksi }) {
   const [loading, setLoading] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const sortBy = searchParams.get("sort") || "created_at";
-  const sortOrder = searchParams.get("order") || "desc";
+  // const sortBy = searchParams.get("sort") || "created_at";
+  // const sortOrder = searchParams.get("order") || "desc";
 
   // Fungsi untuk membuat link pengurutan
   const getSortLink = (key) => {

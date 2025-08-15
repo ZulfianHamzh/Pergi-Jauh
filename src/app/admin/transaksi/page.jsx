@@ -1,11 +1,23 @@
 // src/app/admin/transaksi/page.jsx
-
-import { redirect } from 'next/navigation';
+import { getTransaksi } from '@/lib/data';
 import TransaksiClient from './TransaksiClient';
-import { getTransaksi, getTransaksiById } from '@/lib/data';
 
-export default async function TransaksiPage() {
-   const transaksiData = await getTransaksi();
+// Supaya halaman selalu dirender secara dinamis
+export const dynamic = 'force-dynamic';
 
-  return <TransaksiClient initialTransaksi={transaksiData || []} />;
+export default async function TransaksiPage({ searchParams }) {
+  // Ambil data transaksi di server
+  const transaksiData = await getTransaksi();
+
+  // Ambil sort dan order dari searchParams (default kalau tidak ada)
+  const sortBy = searchParams.sort || 'created_at';
+  const sortOrder = searchParams.order || 'desc';
+
+  return (
+    <TransaksiClient
+      initialTransaksi={transaksiData || []}
+      sortBy={sortBy}
+      sortOrder={sortOrder}
+    />
+  );
 }
