@@ -6,7 +6,6 @@ import Link from "next/link";
 import Image from "next/image";
 import LogoutButton from "./LogoutButton";
 import { deleteProductCombinationAction } from "@/app/admin/actions";
-import { useSearchParams } from "next/navigation";
 
 // --- Ikon-ikon ---
 const SortIcon = ({ direction }) => (
@@ -116,7 +115,7 @@ const filterData = (data, searchTerm, keys) => {
 export default function AdminPageClient({
   initialProducts,
   initialEvents,
-  initialCombinations,
+  initialCombinations, // Diasumsikan ini sekarang menyertakan category
   sortBy,
   sortOrder,
 }) {
@@ -132,23 +131,15 @@ export default function AdminPageClient({
     "category",
   ]);
   const filteredEvents = filterData(events, searchTerm, ["title"]);
-  const filteredCombinations = filterData(combinations, searchTerm, ["name"]);
+  // Tambahkan 'category' ke filter kombinasi
+  const filteredCombinations = filterData(combinations, searchTerm, [
+    "name",
+    "category",
+  ]);
 
-  const sortedProducts = sortData(
-    filteredProducts,
-    sortBy,
-    sortOrder
-  );
-  const sortedEvents = sortData(
-    filteredEvents,
-    sortBy,
-    sortOrder
-  );
-  const sortedCombinations = sortData(
-    filteredCombinations,
-    sortBy,
-    sortOrder
-  );
+  const sortedProducts = sortData(filteredProducts, sortBy, sortOrder);
+  const sortedEvents = sortData(filteredEvents, sortBy, sortOrder);
+  const sortedCombinations = sortData(filteredCombinations, sortBy, sortOrder);
 
   // Fungsi untuk membuat link pengurutan
   const getSortLink = (key) => {
@@ -219,6 +210,13 @@ export default function AdminPageClient({
             className="block py-2 px-4 rounded-lg bg-green-500 hover:bg-green-600 transition-colors duration-200"
           >
             Tambah Event
+          </Link>
+          <Link
+            href="/admin/transaksi"
+            onClick={closeSidebar}
+            className="block py-2 px-4 rounded-lg bg-orange-500 hover:bg-orange-600 transition-colors duration-200"
+          >
+            Lihat Transaksi
           </Link>
           <hr className="my-4 border-gray-700" />
           <div className="w-full">
@@ -373,7 +371,7 @@ export default function AdminPageClient({
           </div>
         </section>
 
-        {/* SECTION KOMBINASI */}
+        {/* --- PERUBAHAN: SECTION KOMBINASI (Diperbarui dengan kolom Kategori) --- */}
         <section className="mb-4 p-4 md:p-6 bg-white rounded-xl shadow-lg">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl md:text-2xl font-semibold text-gray-800">
@@ -381,11 +379,12 @@ export default function AdminPageClient({
             </h2>
           </div>
           <div className="overflow-x-auto rounded-lg border">
+            {/* Sesuaikan min-w untuk memberi ruang kolom baru */}
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-4 py-3 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                    No
+                    Gambar
                   </th>
                   <th className="px-4 py-3 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer hover:bg-gray-100 transition-colors">
                     <Link
@@ -407,6 +406,20 @@ export default function AdminPageClient({
                       {sortBy === "price" && <SortIcon direction={sortOrder} />}
                     </Link>
                   </th>
+                  {/* --- PERUBAHAN: Tambahkan kolom Kategori --- */}
+                  <th className="px-4 py-3 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer hover:bg-gray-100 transition-colors">
+                    <Link
+                      href={getSortLink("category")}
+                      className="flex items-center"
+                      shallow
+                    >
+                      Kategori
+                      {sortBy === "category" && (
+                        <SortIcon direction={sortOrder} />
+                      )}
+                    </Link>
+                  </th>
+                  {/* --- AKHIR PERUBAHAN --- */}
                   <th className="px-4 py-3 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase">
                     Komponen
                   </th>
@@ -418,18 +431,25 @@ export default function AdminPageClient({
               <tbody className="bg-white divide-y divide-gray-200">
                 {sortedCombinations.length === 0 ? (
                   <tr>
+                    {/* Sesuaikan colspan karena ada kolom baru (6 -> 7) */}
                     <td
-                      colSpan="5"
+                      colSpan="7"
                       className="px-4 py-4 md:px-6 md:py-4 text-sm text-center text-gray-500"
                     >
                       Belum ada kombinasi.
                     </td>
                   </tr>
                 ) : (
-                  sortedCombinations.map((combo, index) => (
+                  sortedCombinations.map((combo) => (
                     <tr key={combo.id} className="hover:bg-gray-50">
-                      <td className="px-4 py-4 md:px-6 md:py-4 text-sm text-gray-500">
-                        {index + 1}
+                      <td className="px-4 py-4 md:px-6 md:py-4">
+                        <Image
+                          src={combo.image_url || "/images/no-image.png"}
+                          alt={`Gambar ${combo.name}`}
+                          width={48}
+                          height={48}
+                          className="rounded object-cover w-12 h-12 md:w-16 md:h-16"
+                        />
                       </td>
                       <td className="px-4 py-4 md:px-6 md:py-4 text-sm text-gray-900 font-medium truncate max-w-[100px] md:max-w-xs">
                         {combo.name}
@@ -437,6 +457,11 @@ export default function AdminPageClient({
                       <td className="px-4 py-4 md:px-6 md:py-4 text-sm text-gray-500">
                         Rp{combo.price.toLocaleString("id-ID")}
                       </td>
+                      {/* --- PERUBAHAN: Tambahkan sel untuk Kategori --- */}
+                      <td className="px-4 py-4 md:px-6 md:py-4 text-sm text-gray-500">
+                        {combo.category || "-"}
+                      </td>
+                      {/* --- AKHIR PERUBAHAN --- */}
                       <td className="px-4 py-4 md:px-6 md:py-4 text-sm text-gray-500">
                         {combo.Product_combination_items &&
                         combo.Product_combination_items.length > 0 ? (
@@ -468,11 +493,27 @@ export default function AdminPageClient({
                         )}
                       </td>
                       <td className="px-4 py-4 md:px-6 md:py-4 text-right text-sm font-medium whitespace-nowrap space-x-3">
-                        <form action={deleteProductCombinationAction}>
+                        <Link
+                          href={`/admin/kombinasi/${combo.id}/edit`}
+                          className="text-indigo-600 hover:text-indigo-900 transition-colors duration-200"
+                        >
+                          Edit
+                        </Link>
+                        <form
+                          action={deleteProductCombinationAction}
+                          onSubmit={(e) => {
+                            if (
+                              !confirm(`Yakin hapus kombinasi '${combo.name}'?`)
+                            ) {
+                              e.preventDefault();
+                            }
+                          }}
+                          className="inline"
+                        >
                           <input type="hidden" name="id" value={combo.id} />
                           <button
                             type="submit"
-                            className="text-red-600 hover:text-red-900 transition-colors duration-200"
+                            className="text-red-600 hover:text-red-900 transition-colors duration-200 ml-3"
                           >
                             Hapus
                           </button>
@@ -485,6 +526,7 @@ export default function AdminPageClient({
             </table>
           </div>
         </section>
+        {/* --- AKHIR PERUBAHAN: SECTION KOMBINASI --- */}
 
         {/* SECTION EVENT */}
         <section className="p-4 md:p-6 bg-white rounded-xl shadow-lg">

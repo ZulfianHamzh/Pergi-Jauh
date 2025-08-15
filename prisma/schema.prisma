@@ -80,25 +80,22 @@ model Event {
 }
 
 model Menu_Transaksi {
-  id                     BigInt    @id @default(autoincrement())
-  id_transaksi           String
-  nama_menu              String
-  harga_menu             Decimal   @db.Decimal(10, 2)
-  jumlah_menu            Int
-  created_at             DateTime? @default(now()) @db.Timestamptz(6)
-  topping_tambahan       String?
-  topping_kentang        String?
-  suhu                   String?
-  topping_tambahan_qty   Int?
-  topping_tambahan_harga Decimal?  @db.Decimal(10, 2)
-  topping_tambahan_total Decimal?  @db.Decimal(10, 2)
-  topping_kentang_qty    Int?
-  topping_kentang_harga  Decimal?  @db.Decimal(10, 2)
-  topping_kentang_total  Decimal?  @db.Decimal(10, 2)
-  suhu_minuman           String?
-  suhu_harga             Decimal?  @db.Decimal(10, 2)
-  suhu_total             Decimal?  @db.Decimal(10, 2)
-  Transaksi              Transaksi @relation(fields: [id_transaksi], references: [id_transaksi], onDelete: Cascade, onUpdate: NoAction, map: "fk_id_transaksi")
+  id                    BigInt    @id @default(autoincrement())
+  id_transaksi          String
+  nama_menu             String
+  harga_menu            Decimal   @db.Decimal(10, 2)
+  jumlah_menu           Int
+  created_at            DateTime? @default(now()) @db.Timestamptz(6)
+  suhu                  String?
+  suhu_minuman          String?
+  suhu_harga            Decimal?  @db.Decimal(10, 2)
+  suhu_total            Decimal?  @db.Decimal(10, 2)
+  harga_menu_asli       Decimal?  @db.Decimal
+  topping_tambahan_list Json?
+  topping_kentang_list  Json?
+  indomie_variant       Json?
+  id_menu               String?
+  Transaksi             Transaksi @relation(fields: [id_transaksi], references: [id_transaksi], onDelete: Cascade, onUpdate: NoAction, map: "fk_id_transaksi")
 
   @@index([id_transaksi], map: "idx_menu_transaksi_id_transaksi")
 }
@@ -162,6 +159,9 @@ model Product_combinations {
   price                     Float
   created_at                DateTime                    @default(now()) @db.Timestamptz(6)
   updated_at                DateTime                    @default(now()) @db.Timestamptz(6)
+  image_url                 String?
+  category                  Category?
+  productDetail             String?
   Product_combination_items Product_combination_items[]
 }
 
