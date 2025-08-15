@@ -67,6 +67,7 @@ model Product {
   createdAt                 DateTime                    @default(now()) @db.Timestamptz(6)
   updatedAt                 DateTime                    @default(now()) @updatedAt @db.Timestamptz(6)
   stock                     BigInt
+  harga_beli_satuan         Float?
   Product_combination_items Product_combination_items[]
 }
 

@@ -76,6 +76,25 @@ export default function EditProductForm({ product }) {
         </div>
 
         <div>
+            <label
+              htmlFor="per_item_price"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Harga Beli Satuan (Rp)
+            </label>
+            <input
+              type="number"
+              id="per_item_price"
+              name="per_item_price"
+              required
+              min="0"
+              step="any"
+              defaultValue={product.harga_beli_satuan}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700"
+            />
+          </div>
+
+        <div>
           <label
             htmlFor="stock"
             className="block text-sm font-medium text-gray-700"

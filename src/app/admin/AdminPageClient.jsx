@@ -296,6 +296,16 @@ export default function AdminPageClient({
                   </th>
                   <th className="px-4 py-3 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer hover:bg-gray-100 transition-colors">
                     <Link
+                      href={getSortLink("per_item_price")}
+                      className="flex items-center"
+                      shallow
+                    >
+                      Harga Item Satuan
+                      {sortBy === "per_item_price" && <SortIcon direction={sortOrder} />}
+                    </Link>
+                  </th>
+                  <th className="px-4 py-3 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer hover:bg-gray-100 transition-colors">
+                    <Link
                       href={getSortLink("stock")}
                       className="flex items-center"
                       shallow
@@ -347,7 +357,10 @@ export default function AdminPageClient({
                         {product.name}
                       </td>
                       <td className="px-4 py-4 md:px-6 md:py-4 text-sm text-gray-500">
-                        Rp{product.price.toLocaleString("id-ID")}
+                        Rp {product.price.toLocaleString("id-ID")}
+                      </td>
+                      <td className="px-4 py-4 md:px-6 md:py-4 text-sm text-gray-500">
+                        Rp {Number(product.harga_beli_satuan).toLocaleString("id-ID")}
                       </td>
                       <td className="px-4 py-4 md:px-6 md:py-4 text-sm text-gray-500">
                         {product.stock}
