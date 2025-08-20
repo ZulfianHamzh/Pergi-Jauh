@@ -8,16 +8,16 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { exportToExcel } from "@/utils/export"; // Import fungsi export yang baru
 
 // Fungsi utilitas untuk memformat tanggal
-// const formatDate = (dateString) => {
-//   const date = new Date(dateString);
-//   return date.toLocaleDateString("id-ID", {
-//     day: "2-digit",
-//     month: "short",
-//     year: "numeric",
-//     hour: "2-digit",
-//     minute: "2-digit",
-//   });
-// };
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("id-ID", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
 
 const formatJakartaDate = (date) => {
   const d = new Date(date);
@@ -121,9 +121,9 @@ export default function TransaksiClient({ initialTransaksi, sortBy, sortOrder })
     // Filter berdasarkan tanggal
     if (selectedDate) {
       filtered = filtered.filter((item) => {
-  const itemDate = formatJakartaDate(item.created_at);
-  return itemDate === selectedDate;
-});
+        const itemDate = formatJakartaDate(item.created_at);
+        return itemDate === selectedDate;
+      });
     }
 
     // Filter berdasarkan pencarian
@@ -164,13 +164,12 @@ export default function TransaksiClient({ initialTransaksi, sortBy, sortOrder })
   const handleExport = () => {
     // Siapkan data untuk diekspor
     const summaryData = {
-        grandTotal: formatCurrency(grandTotal),
-        totalQris: formatCurrency(totalQris),
-        totalTunai: formatCurrency(totalTunai),
-      };
+      grandTotal: formatCurrency(grandTotal),
+      totalQris: formatCurrency(totalQris),
+      totalTunai: formatCurrency(totalTunai),
+    };
     const dataToExport = filteredTransaksi.map((item) => {
       // Ambil detail menu dari item.Menu_Transaksi
-
 
       const menuDetails =
         item.Menu_Transaksi && item.Menu_Transaksi.length > 0
@@ -181,10 +180,6 @@ export default function TransaksiClient({ initialTransaksi, sortBy, sortOrder })
                 )}`
             ).join("\n")
           : "Tidak ada item";
-
-        
-
-      
 
       return {
         "ID Transaksi": item.id_transaksi,
@@ -660,11 +655,11 @@ export default function TransaksiClient({ initialTransaksi, sortBy, sortOrder })
                                             </p>
                                           )}
                                           {menu.topping_tambahan_list &&
-                                            Array.isArray(
-                                              menu.topping_tambahan_list
-                                            ) &&
-                                            menu.topping_tambahan_list.length >
-                                              0 && (
+                                          Array.isArray(
+                                            menu.topping_tambahan_list
+                                          ) &&
+                                          menu.topping_tambahan_list.length >
+                                            0 && (
                                               <div className="text-xs text-black">
                                                 Topping:{" "}
                                                 {menu.topping_tambahan_list
