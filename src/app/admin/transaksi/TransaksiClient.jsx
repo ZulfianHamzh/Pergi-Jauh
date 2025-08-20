@@ -8,15 +8,22 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { exportToExcel } from "@/utils/export"; // Import fungsi export yang baru
 
 // Fungsi utilitas untuk memformat tanggal
-const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  return date.toLocaleDateString("id-ID", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+// const formatDate = (dateString) => {
+//   const date = new Date(dateString);
+//   return date.toLocaleDateString("id-ID", {
+//     day: "2-digit",
+//     month: "short",
+//     year: "numeric",
+//     hour: "2-digit",
+//     minute: "2-digit",
+//   });
+// };
+
+const formatJakartaDate = (date) => {
+  const d = new Date(date);
+  return new Intl.DateTimeFormat("sv-SE", {
+    timeZone: "Asia/Jakarta",
+  }).format(d); // hasil: YYYY-MM-DD
 };
 
 // Fungsi utilitas untuk memformat mata uang
@@ -114,9 +121,9 @@ export default function TransaksiClient({ initialTransaksi, sortBy, sortOrder })
     // Filter berdasarkan tanggal
     if (selectedDate) {
       filtered = filtered.filter((item) => {
-        const itemDate = new Date(item.created_at).toISOString().split("T")[0];
-        return itemDate === selectedDate;
-      });
+  const itemDate = formatJakartaDate(item.created_at);
+  return itemDate === selectedDate;
+});
     }
 
     // Filter berdasarkan pencarian
