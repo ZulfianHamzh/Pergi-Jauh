@@ -188,7 +188,7 @@ export default function TransaksiClient({ initialTransaksi, sortBy, sortOrder })
 
       return {
         "ID Transaksi": item.id_transaksi,
-        "Tanggal & Waktu": formatDate(item.created_at),
+        "Tanggal & Waktu": formatJakartaDate(item.created_at),
         "Atas Nama": item.atas_nama,
         Pembayaran: item.pembayaran,
         Total: toNumber(item.total),
