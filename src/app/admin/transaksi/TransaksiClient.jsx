@@ -20,6 +20,13 @@ const formatDate = (dateString) => {
   });
 };
 
+const formatJakartaDate = (date) => {
+  const d = new Date(date);
+  return new Intl.DateTimeFormat("sv-SE", {
+    timeZone: "Asia/Jakarta",
+  }).format(d); // hasil: YYYY-MM-DD
+};
+
 // Fungsi utilitas untuk memformat mata uang
 const formatCurrency = (amount) => {
   const num = typeof amount === "string" ? parseFloat(amount) : amount;
@@ -51,7 +58,11 @@ const safeJsonParse = (jsonString, fallback = null) => {
   }
 };
 
-export default function TransaksiClient({ initialTransaksi, sortBy, sortOrder }) {
+export default function TransaksiClient({
+  initialTransaksi,
+  sortBy,
+  sortOrder,
+}) {
   const router = useRouter();
   const [transaksi, setTransaksi] = useState(initialTransaksi);
   const [filteredTransaksi, setFilteredTransaksi] = useState(initialTransaksi);
@@ -70,10 +81,9 @@ export default function TransaksiClient({ initialTransaksi, sortBy, sortOrder })
   useEffect(() => {
     let filtered = [...transaksi];
 
-    // Filter berdasarkan tanggal
     if (selectedDate) {
       filtered = filtered.filter((item) => {
-        const itemDate = new Date(item.created_at).toISOString().split("T")[0];
+        const itemDate = formatJakartaDate(item.created_at);
         return itemDate === selectedDate;
       });
     }
@@ -505,17 +515,35 @@ export default function TransaksiClient({ initialTransaksi, sortBy, sortOrder })
                                       item.Menu_Transaksi.map((menu, index) => {
                                         // Parsing topping_tambahan_list dengan aman
                                         let toppings = [];
-                                        if (typeof menu.topping_tambahan_list === 'string') {
-                                          toppings = safeJsonParse(menu.topping_tambahan_list, []);
-                                        } else if (Array.isArray(menu.topping_tambahan_list)) {
+                                        if (
+                                          typeof menu.topping_tambahan_list ===
+                                          "string"
+                                        ) {
+                                          toppings = safeJsonParse(
+                                            menu.topping_tambahan_list,
+                                            []
+                                          );
+                                        } else if (
+                                          Array.isArray(
+                                            menu.topping_tambahan_list
+                                          )
+                                        ) {
                                           toppings = menu.topping_tambahan_list;
                                         }
 
                                         // Parsing indomie_variant dengan aman
                                         let variants = [];
-                                        if (typeof menu.indomie_variant === 'string') {
-                                          variants = safeJsonParse(menu.indomie_variant, []);
-                                        } else if (Array.isArray(menu.indomie_variant)) {
+                                        if (
+                                          typeof menu.indomie_variant ===
+                                          "string"
+                                        ) {
+                                          variants = safeJsonParse(
+                                            menu.indomie_variant,
+                                            []
+                                          );
+                                        } else if (
+                                          Array.isArray(menu.indomie_variant)
+                                        ) {
                                           variants = menu.indomie_variant;
                                         }
 
@@ -525,7 +553,8 @@ export default function TransaksiClient({ initialTransaksi, sortBy, sortOrder })
                                             className="border-b pb-2"
                                           >
                                             <p className="font-medium">
-                                              {menu.nama_menu} x{menu.jumlah_menu}
+                                              {menu.nama_menu} x
+                                              {menu.jumlah_menu}
                                             </p>
                                             <p className="text-black">
                                               {formatCurrency(
@@ -541,23 +570,40 @@ export default function TransaksiClient({ initialTransaksi, sortBy, sortOrder })
                                             {/* Tampilkan topping tambahan dengan harga */}
                                             {toppings.length > 0 && (
                                               <div className="text-xs text-gray-600">
-                                                <p className="font-medium">Topping:</p>
-                                                {toppings.map((topping, idx) => (
-                                                  <p key={idx} className="ml-2">
-                                                    • {topping.name} - {formatCurrency(topping.price || 0)}
-                                                  </p>
-                                                ))}
+                                                <p className="font-medium">
+                                                  Topping:
+                                                </p>
+                                                {toppings.map(
+                                                  (topping, idx) => (
+                                                    <p
+                                                      key={idx}
+                                                      className="ml-2"
+                                                    >
+                                                      • {topping.name} -{" "}
+                                                      {formatCurrency(
+                                                        topping.price || 0
+                                                      )}
+                                                    </p>
+                                                  )
+                                                )}
                                               </div>
                                             )}
                                             {/* Tampilkan varian indomie */}
                                             {variants.length > 0 && (
                                               <div className="text-xs text-gray-600">
-                                                <p className="font-medium">Varian:</p>
-                                                {variants.map((variant, idx) => (
-                                                  <p key={idx} className="ml-2">
-                                                    • {variant.name}
-                                                  </p>
-                                                ))}
+                                                <p className="font-medium">
+                                                  Varian:
+                                                </p>
+                                                {variants.map(
+                                                  (variant, idx) => (
+                                                    <p
+                                                      key={idx}
+                                                      className="ml-2"
+                                                    >
+                                                      • {variant.name}
+                                                    </p>
+                                                  )
+                                                )}
                                               </div>
                                             )}
                                           </div>
