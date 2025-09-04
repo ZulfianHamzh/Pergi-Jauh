@@ -5,7 +5,8 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { deleteTransaksiAction } from "../actions";
 import { useSearchParams, useRouter } from "next/navigation";
-import { exportToExcel } from "@/utils/export"; // Import fungsi export yang baru
+import { exportToExcel } from "@/utils/export";
+import AdminNavbar from "@/components/AdminNavbar";
 
 // Fungsi utilitas untuk memformat tanggal
 const formatDate = (dateString) => {
@@ -39,72 +40,30 @@ const toNumber = (value) => {
   return 0;
 };
 
-// Dummy Components untuk icons dan logout
-const MenuIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="h-6 w-6"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M4 6h16M4 12h16M4 18h16"
-    />
-  </svg>
-);
-const CloseIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="h-6 w-6"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M6 18L18 6M6 6l12 12"
-    />
-  </svg>
-);
-const LogoutButton = () => (
-  <button className="w-full text-left py-2 px-4 rounded-lg bg-red-500 hover:bg-red-600 transition-colors duration-200">
-    Logout
-  </button>
-);
+// Fungsi utilitas untuk parsing JSON dengan aman
+const safeJsonParse = (jsonString, fallback = null) => {
+  if (!jsonString) return fallback;
+  try {
+    return JSON.parse(jsonString);
+  } catch (e) {
+    console.error("JSON Parse Error:", e);
+    return fallback;
+  }
+};
 
 export default function TransaksiClient({ initialTransaksi, sortBy, sortOrder }) {
-  // const searchParams = useSearchParams();
   const router = useRouter();
-
   const [transaksi, setTransaksi] = useState(initialTransaksi);
   const [filteredTransaksi, setFilteredTransaksi] = useState(initialTransaksi);
   const [selectedDate, setSelectedDate] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [showDetail, setShowDetail] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  // const sortBy = searchParams.get("sort") || "created_at";
-  // const sortOrder = searchParams.get("order") || "desc";
 
   // Fungsi untuk membuat link pengurutan
   const getSortLink = (key) => {
     const newOrder = sortBy === key && sortOrder === "asc" ? "desc" : "asc";
     return `?sort=${key}&order=${newOrder}`;
-  };
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
-  const closeSidebar = () => {
-    setIsSidebarOpen(false);
   };
 
   // Menggabungkan filter dan pencarian
@@ -155,29 +114,44 @@ export default function TransaksiClient({ initialTransaksi, sortBy, sortOrder })
 
   // Fungsi handler untuk export
   const handleExport = () => {
-    // Siapkan data untuk diekspor
     const summaryData = {
-        grandTotal: formatCurrency(grandTotal),
-        totalQris: formatCurrency(totalQris),
-        totalTunai: formatCurrency(totalTunai),
-      };
+      grandTotal: formatCurrency(grandTotal),
+      totalQris: formatCurrency(totalQris),
+      totalTunai: formatCurrency(totalTunai),
+    };
     const dataToExport = filteredTransaksi.map((item) => {
-      // Ambil detail menu dari item.Menu_Transaksi
-
-
       const menuDetails =
         item.Menu_Transaksi && item.Menu_Transaksi.length > 0
-          ? item.Menu_Transaksi.map(
-              (menu) =>
-                `${menu.nama_menu} (${menu.jumlah_menu}x) - ${formatCurrency(
-                  toNumber(menu.harga_menu) * menu.jumlah_menu
-                )}`
-            ).join("\n")
+          ? item.Menu_Transaksi.map((menu) => {
+              let details = `${menu.nama_menu} (${menu.jumlah_menu}x)`;
+              if (menu.suhu) {
+                details += ` (${menu.suhu})`;
+              }
+              // Memperbaiki validasi untuk topping_tambahan_list
+              if (
+                Array.isArray(menu.topping_tambahan_list) &&
+                menu.topping_tambahan_list.length > 0
+              ) {
+                const toppings = menu.topping_tambahan_list
+                  .map((topping) => topping.name)
+                  .join(", ");
+                details += ` + Topping: ${toppings}`;
+              }
+              // Memperbaiki validasi untuk indomie_variant
+              if (
+                Array.isArray(menu.indomie_variant) &&
+                menu.indomie_variant.length > 0
+              ) {
+                const variants = menu.indomie_variant
+                  .map((variant) => variant.name)
+                  .join(", ");
+                details += ` + Varian: ${variants}`;
+              }
+              return `${details} - ${formatCurrency(
+                toNumber(menu.harga_menu) * menu.jumlah_menu
+              )}`;
+            }).join("\n")
           : "Tidak ada item";
-
-        
-
-      
 
       return {
         "ID Transaksi": item.id_transaksi,
@@ -193,17 +167,13 @@ export default function TransaksiClient({ initialTransaksi, sortBy, sortOrder })
       };
     });
 
-    // Tentukan nama file secara kondisional
     let filename;
     if (selectedDate) {
-      // Jika ada tanggal yang difilter
       filename = `Laporan_Transaksi_${selectedDate}`;
     } else {
-      // Jika tidak ada filter tanggal
       filename = "Laporan_Semua_Transaksi";
     }
 
-    // Panggil fungsi export
     exportToExcel(dataToExport, summaryData, filename);
   };
 
@@ -213,12 +183,12 @@ export default function TransaksiClient({ initialTransaksi, sortBy, sortOrder })
     return sum + total;
   }, 0);
 
-  // NEW: Hitung total QRIS
+  // Hitung total QRIS
   const totalQris = filteredTransaksi
     .filter((item) => item.pembayaran?.toLowerCase() === "qris")
     .reduce((sum, item) => sum + toNumber(item.total), 0);
 
-  // NEW: Hitung total Tunai
+  // Hitung total Tunai
   const totalTunai = filteredTransaksi
     .filter((item) => item.pembayaran?.toLowerCase() === "tunai")
     .reduce((sum, item) => sum + toNumber(item.total), 0);
@@ -226,12 +196,9 @@ export default function TransaksiClient({ initialTransaksi, sortBy, sortOrder })
   // Hapus transaksi
   const handleDelete = async (id_transaksi) => {
     if (!confirm("Yakin ingin menghapus transaksi ini?")) return;
-
     setLoading(true);
     try {
       const result = await deleteTransaksiAction(id_transaksi);
-
-      // Menggunakan router.refresh() untuk mendapatkan data terbaru dari server
       if (result) {
         setTransaksi((prev) =>
           prev.filter((t) => t.id_transaksi !== id_transaksi)
@@ -254,89 +221,9 @@ export default function TransaksiClient({ initialTransaksi, sortBy, sortOrder })
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      {/* Overlay untuk drawer mobile - muncul saat drawer terbuka */}
-      {isSidebarOpen && (
-        <div
-          className="fixed inset-0 z-20 bg-black bg-opacity-50 lg:hidden"
-          onClick={closeSidebar}
-        ></div>
-      )}
-
-      {/* Sidebar / Drawer - Responsive */}
-      <aside
-        className={`fixed inset-y-0 left-0 z-30 w-64 bg-[#2C3E50] text-white p-6 shadow-xl transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:z-auto ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-      >
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl font-bold">Admin Panel</h2>
-          <button
-            onClick={closeSidebar}
-            className="lg:hidden text-white focus:outline-none"
-            aria-label="Tutup menu"
-          >
-            <CloseIcon />
-          </button>
-        </div>
-        <nav className="space-y-4">
-          <Link
-            href="/"
-            onClick={closeSidebar}
-            className="block py-2 px-4 rounded-lg hover:bg-[#34495E] transition-colors duration-200"
-          >
-            Home
-          </Link>
-          <hr className="my-4 border-gray-700" />
-          <Link
-            href="/admin/products/new"
-            onClick={closeSidebar}
-            className="block py-2 px-4 rounded-lg bg-blue-500 hover:bg-blue-600 transition-colors duration-200"
-          >
-            Tambah Produk
-          </Link>
-          <Link
-            href="/admin/kombinasi/new"
-            onClick={closeSidebar}
-            className="block py-2 px-4 rounded-lg bg-purple-500 hover:bg-purple-600 transition-colors duration-200"
-          >
-            Tambah Kombinasi
-          </Link>
-          <Link
-            href="/admin/events/new"
-            onClick={closeSidebar}
-            className="block py-2 px-4 rounded-lg bg-green-500 hover:bg-green-600 transition-colors duration-200"
-          >
-            Tambah Event
-          </Link>
-          <Link
-            href="/admin/transaksi"
-            onClick={closeSidebar}
-            className="block py-2 px-4 rounded-lg bg-orange-500 hover:bg-orange-600 transition-colors duration-200"
-          >
-            Lihat Transaksi
-          </Link>
-          <hr className="my-4 border-gray-700" />
-          <div className="w-full">
-            <LogoutButton />
-          </div>
-        </nav>
-      </aside>
-
-      {/* Konten utama - Menyesuaikan tata letak untuk mobile dan desktop */}
+    <div className="flex flex-col lg:flex-row min-h-screen bg-gray-100 font-inter">
+      <AdminNavbar />
       <main className="flex-1 p-4 md:p-6 transition-all duration-300 ease-in-out">
-        {/* Header Mobile - Hanya muncul di layar kecil */}
-        <header className="lg:hidden flex items-center justify-between mb-6 p-4 bg-white rounded-lg shadow">
-          <h1 className="text-xl font-bold text-gray-800">Admin Panel</h1>
-          <button
-            onClick={toggleSidebar}
-            className="text-gray-800 focus:outline-none"
-            aria-label="Buka menu"
-          >
-            <MenuIcon />
-          </button>
-        </header>
-
         <div className="min-h-screen bg-gray-50 p-4 md:p-6">
           <div className="mb-6 flex flex-col md:flex-row md:justify-between md:items-center">
             <div>
@@ -347,7 +234,6 @@ export default function TransaksiClient({ initialTransaksi, sortBy, sortOrder })
                 Kelola dan lihat riwayat transaksi
               </p>
             </div>
-            {/* Tombol Export yang baru */}
             <button
               onClick={handleExport}
               className="mt-4 md:mt-0 px-4 py-2 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition-colors duration-200 flex items-center justify-center"
@@ -368,10 +254,8 @@ export default function TransaksiClient({ initialTransaksi, sortBy, sortOrder })
             </button>
           </div>
 
-          {/* Filter, Pencarian & Grand Total */}
           <div className="mb-6 p-6 bg-gradient-to-r from-white via-gray-50 to-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-shadow duration-300">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-              {/* Filter Tanggal */}
               <div className="flex-1">
                 <label
                   htmlFor="date-filter"
@@ -406,7 +290,6 @@ export default function TransaksiClient({ initialTransaksi, sortBy, sortOrder })
                 </div>
               </div>
 
-              {/* Cari Transaksi */}
               <div className="flex-1">
                 <label
                   htmlFor="search"
@@ -442,7 +325,6 @@ export default function TransaksiClient({ initialTransaksi, sortBy, sortOrder })
                 </div>
               </div>
 
-              {/* Ringkasan Total */}
               <div className="md:text-right md:w-auto w-full bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
                 <p className="text-lg font-bold text-gray-800">
                   Grand Total:{" "}
@@ -469,7 +351,6 @@ export default function TransaksiClient({ initialTransaksi, sortBy, sortOrder })
             </div>
           </div>
 
-          {/* Tabel Transaksi */}
           <div className="bg-white rounded-lg shadow overflow-hidden">
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
@@ -537,15 +418,8 @@ export default function TransaksiClient({ initialTransaksi, sortBy, sortOrder })
                               {formatDate(item.created_at)}
                             </div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-black">
-                              {item.atas_nama}
-                            </div>
-                            {item.preferensi_kopi && (
-                              <div className="text-xs text-gray-600">
-                                {item.preferensi_kopi}
-                              </div>
-                            )}
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+                            {item.atas_nama}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
                             {item.pembayaran}
@@ -589,7 +463,6 @@ export default function TransaksiClient({ initialTransaksi, sortBy, sortOrder })
                           </td>
                         </tr>
 
-                        {/* Detail Transaksi */}
                         {showDetail === item.id_transaksi && (
                           <tr>
                             <td colSpan="6" className="px-6 py-4 bg-gray-50">
@@ -629,44 +502,67 @@ export default function TransaksiClient({ initialTransaksi, sortBy, sortOrder })
                                   <div className="text-sm space-y-2 text-black">
                                     {item.Menu_Transaksi &&
                                     item.Menu_Transaksi.length > 0 ? (
-                                      item.Menu_Transaksi.map((menu, index) => (
-                                        <div
-                                          key={index}
-                                          className="border-b pb-2"
-                                        >
-                                          <p className="font-medium">
-                                            {menu.nama_menu} x{menu.jumlah_menu}
-                                          </p>
-                                          <p className="text-black">
-                                            {formatCurrency(
-                                              toNumber(menu.harga_menu) *
-                                                menu.jumlah_menu
-                                            )}
-                                          </p>
-                                          {menu.suhu && (
-                                            <p className="text-xs text-black">
-                                              Suhu: {menu.suhu} (+
-                                              {formatCurrency(
-                                                toNumber(menu.suhu_harga) || 0
-                                              )}
-                                              )
+                                      item.Menu_Transaksi.map((menu, index) => {
+                                        // Parsing topping_tambahan_list dengan aman
+                                        let toppings = [];
+                                        if (typeof menu.topping_tambahan_list === 'string') {
+                                          toppings = safeJsonParse(menu.topping_tambahan_list, []);
+                                        } else if (Array.isArray(menu.topping_tambahan_list)) {
+                                          toppings = menu.topping_tambahan_list;
+                                        }
+
+                                        // Parsing indomie_variant dengan aman
+                                        let variants = [];
+                                        if (typeof menu.indomie_variant === 'string') {
+                                          variants = safeJsonParse(menu.indomie_variant, []);
+                                        } else if (Array.isArray(menu.indomie_variant)) {
+                                          variants = menu.indomie_variant;
+                                        }
+
+                                        return (
+                                          <div
+                                            key={index}
+                                            className="border-b pb-2"
+                                          >
+                                            <p className="font-medium">
+                                              {menu.nama_menu} x{menu.jumlah_menu}
                                             </p>
-                                          )}
-                                          {menu.topping_tambahan_list &&
-                                            Array.isArray(
-                                              menu.topping_tambahan_list
-                                            ) &&
-                                            menu.topping_tambahan_list.length >
-                                              0 && (
-                                              <div className="text-xs text-black">
-                                                Topping:{" "}
-                                                {menu.topping_tambahan_list
-                                                  .map((t) => t.name || t)
-                                                  .join(", ")}
+                                            <p className="text-black">
+                                              {formatCurrency(
+                                                toNumber(menu.harga_menu) *
+                                                  menu.jumlah_menu
+                                              )}
+                                            </p>
+                                            {menu.suhu && (
+                                              <p className="text-xs text-gray-600">
+                                                Suhu: {menu.suhu}
+                                              </p>
+                                            )}
+                                            {/* Tampilkan topping tambahan dengan harga */}
+                                            {toppings.length > 0 && (
+                                              <div className="text-xs text-gray-600">
+                                                <p className="font-medium">Topping:</p>
+                                                {toppings.map((topping, idx) => (
+                                                  <p key={idx} className="ml-2">
+                                                    • {topping.name} - {formatCurrency(topping.price || 0)}
+                                                  </p>
+                                                ))}
                                               </div>
                                             )}
-                                        </div>
-                                      ))
+                                            {/* Tampilkan varian indomie */}
+                                            {variants.length > 0 && (
+                                              <div className="text-xs text-gray-600">
+                                                <p className="font-medium">Varian:</p>
+                                                {variants.map((variant, idx) => (
+                                                  <p key={idx} className="ml-2">
+                                                    • {variant.name}
+                                                  </p>
+                                                ))}
+                                              </div>
+                                            )}
+                                          </div>
+                                        );
+                                      })
                                     ) : (
                                       <p className="text-black">
                                         Tidak ada item

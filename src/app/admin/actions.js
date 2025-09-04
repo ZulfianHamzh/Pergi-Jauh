@@ -56,6 +56,7 @@ export async function createProductAction(prevState, formData) {
   const category = formData.get("category");
   const productDetail = formData.get("productDetail");
   const stock = parseInt(formData.get("stock"), 10);
+  const harga_beli_satuan = parseFloat(formData.get("per_item_price"))
 
   if (!name || isNaN(price) || !availability) {
     return { message: "Missing required fields: name, price, availability" };
@@ -74,6 +75,7 @@ export async function createProductAction(prevState, formData) {
     category,
     productDetail,
     stock: isNaN(stock) ? BigInt(0) : BigInt(stock),
+    harga_beli_satuan,
   };
 
   try {
@@ -101,6 +103,7 @@ export async function updateProductAction(prevState, formData) {
   const category = formData.get("category");
   const productDetail = formData.get("productDetail");
   const stock = parseInt(formData.get("stock"), 10);
+  const harga_beli_satuan = parseFloat(formData.get("per_item_price"))
 
   if (!id || !name || isNaN(price) || !availability) {
     return {
@@ -126,6 +129,7 @@ export async function updateProductAction(prevState, formData) {
     category,
     productDetail,
     stock: isNaN(stock) ? BigInt(0) : BigInt(stock),
+    harga_beli_satuan,
   };
 
   try {

@@ -4,8 +4,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import LogoutButton from "./LogoutButton";
 import { deleteProductCombinationAction } from "@/app/admin/actions";
+import AdminNavbar from "@/components/AdminNavbar";
 
 // --- Ikon-ikon ---
 const SortIcon = ({ direction }) => (
@@ -24,38 +24,6 @@ const SortIcon = ({ direction }) => (
   </svg>
 );
 
-const MenuIcon = () => (
-  <svg
-    className="w-6 h-6"
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="2"
-      d="M4 6h16M4 12h16M4 18h16"
-    ></path>
-  </svg>
-);
-
-const CloseIcon = () => (
-  <svg
-    className="w-6 h-6"
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="2"
-      d="M6 18L18 6M6 6l12 12"
-    ></path>
-  </svg>
-);
-
 const SearchIcon = () => (
   <svg
     className="h-5 w-5 text-gray-400"
@@ -71,7 +39,6 @@ const SearchIcon = () => (
 );
 
 // --- Fungsi Utilitas ---
-// Fungsi utilitas untuk mengurutkan data
 const sortData = (data, sortBy, sortOrder) => {
   if (!sortBy || !Array.isArray(data)) return data;
 
@@ -96,7 +63,6 @@ const sortData = (data, sortBy, sortOrder) => {
   return sorted;
 };
 
-// Fungsi utilitas untuk memfilter data
 const filterData = (data, searchTerm, keys) => {
   if (!searchTerm || !Array.isArray(data)) return data;
   const lowerCaseSearchTerm = searchTerm.toLowerCase();
@@ -115,11 +81,10 @@ const filterData = (data, searchTerm, keys) => {
 export default function AdminPageClient({
   initialProducts,
   initialEvents,
-  initialCombinations, // Diasumsikan ini sekarang menyertakan category
+  initialCombinations,
   sortBy,
   sortOrder,
 }) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
   const products = initialProducts || [];
@@ -131,7 +96,6 @@ export default function AdminPageClient({
     "category",
   ]);
   const filteredEvents = filterData(events, searchTerm, ["title"]);
-  // Tambahkan 'category' ke filter kombinasi
   const filteredCombinations = filterData(combinations, searchTerm, [
     "name",
     "category",
@@ -141,104 +105,17 @@ export default function AdminPageClient({
   const sortedEvents = sortData(filteredEvents, sortBy, sortOrder);
   const sortedCombinations = sortData(filteredCombinations, sortBy, sortOrder);
 
-  // Fungsi untuk membuat link pengurutan
   const getSortLink = (key) => {
     const newOrder = sortBy === key && sortOrder === "asc" ? "desc" : "asc";
     return `?sort=${key}&order=${newOrder}`;
   };
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
-  const closeSidebar = () => {
-    setIsSidebarOpen(false);
-  };
-
   return (
-    <div className="flex min-h-screen bg-gray-100 font-inter">
-      {/* Overlay untuk drawer mobile - muncul saat drawer terbuka */}
-      {isSidebarOpen && (
-        <div
-          className="fixed inset-0 z-20 bg-black bg-opacity-50 lg:hidden"
-          onClick={closeSidebar}
-        ></div>
-      )}
+    <div className="flex flex-col lg:flex-row min-h-screen bg-gray-100 font-inter">
+      <AdminNavbar />
 
-      {/* Sidebar / Drawer - Responsive */}
-      <aside
-        className={`fixed inset-y-0 left-0 z-30 w-64 bg-[#2C3E50] text-white p-6 shadow-xl transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:z-auto ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-      >
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl font-bold">Admin Panel</h2>
-          <button
-            onClick={closeSidebar}
-            className="lg:hidden text-white focus:outline-none"
-            aria-label="Tutup menu"
-          >
-            <CloseIcon />
-          </button>
-        </div>
-        <nav className="space-y-4">
-          <Link
-            href="/"
-            onClick={closeSidebar}
-            className="block py-2 px-4 rounded-lg hover:bg-[#34495E] transition-colors duration-200"
-          >
-            Home
-          </Link>
-          <hr className="my-4 border-gray-700" />
-          <Link
-            href="/admin/products/new"
-            onClick={closeSidebar}
-            className="block py-2 px-4 rounded-lg bg-blue-500 hover:bg-blue-600 transition-colors duration-200"
-          >
-            Tambah Produk
-          </Link>
-          <Link
-            href="/admin/kombinasi/new"
-            onClick={closeSidebar}
-            className="block py-2 px-4 rounded-lg bg-purple-500 hover:bg-purple-600 transition-colors duration-200"
-          >
-            Tambah Kombinasi
-          </Link>
-          <Link
-            href="/admin/events/new"
-            onClick={closeSidebar}
-            className="block py-2 px-4 rounded-lg bg-green-500 hover:bg-green-600 transition-colors duration-200"
-          >
-            Tambah Event
-          </Link>
-          <Link
-            href="/admin/transaksi"
-            onClick={closeSidebar}
-            className="block py-2 px-4 rounded-lg bg-orange-500 hover:bg-orange-600 transition-colors duration-200"
-          >
-            Lihat Transaksi
-          </Link>
-          <hr className="my-4 border-gray-700" />
-          <div className="w-full">
-            <LogoutButton />
-          </div>
-        </nav>
-      </aside>
-
-      {/* Konten utama - Menyesuaikan tata letak untuk mobile dan desktop */}
+      {/* Konten utama */}
       <main className="flex-1 p-4 md:p-6 transition-all duration-300 ease-in-out">
-        {/* Header Mobile - Hanya muncul di layar kecil */}
-        <header className="lg:hidden flex items-center justify-between mb-6 p-4 bg-white rounded-lg shadow">
-          <h1 className="text-xl font-bold text-gray-800">Admin Panel</h1>
-          <button
-            onClick={toggleSidebar}
-            className="text-gray-800 focus:outline-none"
-            aria-label="Buka menu"
-          >
-            <MenuIcon />
-          </button>
-        </header>
-
         {/* Search Bar - Diletakkan di atas semua tabel */}
         <div className="mb-8 p-4 md:p-6 bg-white rounded-xl shadow-lg">
           <label htmlFor="search" className="sr-only">
@@ -301,7 +178,9 @@ export default function AdminPageClient({
                       shallow
                     >
                       Harga Item Satuan
-                      {sortBy === "per_item_price" && <SortIcon direction={sortOrder} />}
+                      {sortBy === "per_item_price" && (
+                        <SortIcon direction={sortOrder} />
+                      )}
                     </Link>
                   </th>
                   <th className="px-4 py-3 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer hover:bg-gray-100 transition-colors">
@@ -360,7 +239,10 @@ export default function AdminPageClient({
                         Rp {product.price.toLocaleString("id-ID")}
                       </td>
                       <td className="px-4 py-4 md:px-6 md:py-4 text-sm text-gray-500">
-                        Rp {Number(product.harga_beli_satuan).toLocaleString("id-ID")}
+                        Rp{" "}
+                        {Number(product.harga_beli_satuan).toLocaleString(
+                          "id-ID"
+                        )}
                       </td>
                       <td className="px-4 py-4 md:px-6 md:py-4 text-sm text-gray-500">
                         {product.stock}
@@ -384,7 +266,7 @@ export default function AdminPageClient({
           </div>
         </section>
 
-        {/* --- PERUBAHAN: SECTION KOMBINASI (Diperbarui dengan kolom Kategori) --- */}
+        {/* SECTION KOMBINASI */}
         <section className="mb-4 p-4 md:p-6 bg-white rounded-xl shadow-lg">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl md:text-2xl font-semibold text-gray-800">
@@ -392,7 +274,6 @@ export default function AdminPageClient({
             </h2>
           </div>
           <div className="overflow-x-auto rounded-lg border">
-            {/* Sesuaikan min-w untuk memberi ruang kolom baru */}
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
@@ -419,7 +300,6 @@ export default function AdminPageClient({
                       {sortBy === "price" && <SortIcon direction={sortOrder} />}
                     </Link>
                   </th>
-                  {/* --- PERUBAHAN: Tambahkan kolom Kategori --- */}
                   <th className="px-4 py-3 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase cursor-pointer hover:bg-gray-100 transition-colors">
                     <Link
                       href={getSortLink("category")}
@@ -432,7 +312,6 @@ export default function AdminPageClient({
                       )}
                     </Link>
                   </th>
-                  {/* --- AKHIR PERUBAHAN --- */}
                   <th className="px-4 py-3 md:px-6 md:py-3 text-left text-xs font-medium text-gray-500 uppercase">
                     Komponen
                   </th>
@@ -444,7 +323,6 @@ export default function AdminPageClient({
               <tbody className="bg-white divide-y divide-gray-200">
                 {sortedCombinations.length === 0 ? (
                   <tr>
-                    {/* Sesuaikan colspan karena ada kolom baru (6 -> 7) */}
                     <td
                       colSpan="7"
                       className="px-4 py-4 md:px-6 md:py-4 text-sm text-center text-gray-500"
@@ -470,11 +348,9 @@ export default function AdminPageClient({
                       <td className="px-4 py-4 md:px-6 md:py-4 text-sm text-gray-500">
                         Rp{combo.price.toLocaleString("id-ID")}
                       </td>
-                      {/* --- PERUBAHAN: Tambahkan sel untuk Kategori --- */}
                       <td className="px-4 py-4 md:px-6 md:py-4 text-sm text-gray-500">
                         {combo.category || "-"}
                       </td>
-                      {/* --- AKHIR PERUBAHAN --- */}
                       <td className="px-4 py-4 md:px-6 md:py-4 text-sm text-gray-500">
                         {combo.Product_combination_items &&
                         combo.Product_combination_items.length > 0 ? (
@@ -539,7 +415,6 @@ export default function AdminPageClient({
             </table>
           </div>
         </section>
-        {/* --- AKHIR PERUBAHAN: SECTION KOMBINASI --- */}
 
         {/* SECTION EVENT */}
         <section className="p-4 md:p-6 bg-white rounded-xl shadow-lg">
